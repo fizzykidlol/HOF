@@ -49,6 +49,10 @@ public class Player : MonoBehaviour {
     public int checkpointNum;
     public Transform[] SpawnPoints;
 
+    public Camera cam;
+    public float horizontalSpeed = 2.0F;
+    public float verticalSpeed = 2.0F;
+
 
     // Use this for initialization
     void Start () {
@@ -75,7 +79,21 @@ public class Player : MonoBehaviour {
                 respawn();
             }
         }
-	}
+        Vector3 fwd = cam.transform.forward;
+        fwd.Normalize();
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 vaxis = Vector3.Cross(fwd, Vector3.right);
+            transform.Rotate(vaxis, -Input.GetAxis("Mouse X"), Space.World);
+            Vector3 haxis = Vector3.Cross(fwd, Vector3.up);
+            transform.Rotate(haxis, -Input.GetAxis("Mouse Y"), Space.World);
+        }
+
+        float h = horizontalSpeed * Input.GetAxis("Mouse X");
+        float v = verticalSpeed * Input.GetAxis("Mouse Y");
+        transform.Rotate(v, h, 0);
+
+    }
 
     //activate pause menu
     private void pause()

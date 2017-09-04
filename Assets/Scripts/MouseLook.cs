@@ -5,8 +5,8 @@ using UnityEngine;
 public class MouseLook : MonoBehaviour
 {
 
-    public float mouseLookLowerLimit = -80f;
-    public float mouseLookUpperLimit = 80f;
+    public float mouseLookLowerLimit = -50f;
+    public float mouseLookUpperLimit = 50f;
     Vector2 mouseLook;
     Vector2 smoothV;
     public float sensitivity = 5.0f;
