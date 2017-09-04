@@ -29,7 +29,7 @@ public class MouseLook : MonoBehaviour
         {
             var md = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-            md = Vector2.Scale(md, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
+            md = Vector2.Scale(md, new Vector2(sensitivity * smoothing * SettingsManager.sensitivity, sensitivity * smoothing * SettingsManager.sensitivity));
             smoothV.x = Mathf.Lerp(smoothV.x, md.x, 1f / smoothing);
             smoothV.y = Mathf.Lerp(smoothV.y, md.y, 1f / smoothing);
             mouseLook += smoothV;

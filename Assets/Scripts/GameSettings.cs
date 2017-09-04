@@ -6,6 +6,7 @@
     public int resolutionIndex;
     public float musicVolume;
     public float SFXVolume;
+    public float sensitivity;
 
 	// Use this for initialization
 	void Start () {

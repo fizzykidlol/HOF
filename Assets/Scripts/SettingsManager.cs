@@ -14,6 +14,7 @@ public class SettingsManager : MonoBehaviour
     public Dropdown vSyncDropdown;
     public Slider musicVolumeSlider;
     public Slider SFXVolumeSlider;
+    public Slider sensitivitySlider;
     public Button applyButton;
 
     public AudioSource musicSource;
@@ -21,6 +22,8 @@ public class SettingsManager : MonoBehaviour
 
     public Resolution[] resolutions;
     public GameSettings gameSettings;
+
+    public static float sensitivity = 1;
 
     public PauseMenu menu;
     // Use this for initialization
@@ -36,6 +39,7 @@ public class SettingsManager : MonoBehaviour
         vSyncDropdown.onValueChanged.AddListener(delegate { OnVSyncChange(); });
         musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChanged(); });
         SFXVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChanged(); });
+        sensitivitySlider.onValueChanged.AddListener(delegate { OnSensitivityChanged(); });
         applyButton.onClick.AddListener(delegate { onApplyButtonPress(); });
 
         resolutions = Screen.resolutions;
@@ -56,6 +60,7 @@ public class SettingsManager : MonoBehaviour
             vSyncDropdown.value = QualitySettings.vSyncCount;
             textureQualityDropdown.value = QualitySettings.masterTextureLimit;
             fullscreenToggle.isOn = Screen.fullScreen;
+            sensitivitySlider.value = 1;
         }
     }
 
@@ -100,6 +105,11 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
+    public void OnSensitivityChanged()
+    {
+        gameSettings.sensitivity = sensitivity = sensitivitySlider.value;
+    }
+
     public void SaveSettings()
     {
         string jsonData = JsonUtility.ToJson(gameSettings, true);
@@ -122,6 +132,8 @@ public class SettingsManager : MonoBehaviour
         textureQualityDropdown.value = gameSettings.textureQuality;
         resolutionDropdown.value = gameSettings.resolutionIndex;
         fullscreenToggle.isOn = gameSettings.fullscreen;
+        SFXVolumeSlider.value = gameSettings.SFXVolume;
+        sensitivitySlider.value = gameSettings.sensitivity;
 
         resolutionDropdown.RefreshShownValue();
     }

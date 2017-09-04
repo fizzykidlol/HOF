@@ -18,6 +18,8 @@ public class PauseMenu : MonoBehaviour {
     public Button quitYesButton;
     public Button quitNoButton;
 
+    public SettingsManager settings;
+
     private void Start()
     {
         resumeButton.onClick.AddListener(delegate { resumeButtonPressed(); });
@@ -70,6 +72,7 @@ public class PauseMenu : MonoBehaviour {
 
     public void exitOptions()
     {
+        settings.SaveSettings();
         optionsPanel.SetActive(false);
         pauseMenuPanel.SetActive(true);
         player.onTopMenu = true;

@@ -116,15 +116,15 @@ public class Player : MonoBehaviour {
     {
         if (stamina < 20 && !breathingSound.isPlaying)
         {
-            breathingSound.Play();
+            //breathingSound.Play();
         }
         if (health == 2 && !lightHeartBeat.isPlaying)
         {
-            lightHeartBeat.Play();
+            //lightHeartBeat.Play();
         }
         else if (health == 1 && !heavyHeartbeat.isPlaying)
         {
-            heavyHeartbeat.Play();
+           // heavyHeartbeat.Play();
         }
     }
 
@@ -178,7 +178,7 @@ public class Player : MonoBehaviour {
 
     private void reduceStamina()
     {
-        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time && cc.grounded)
+        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time && cc.grounded && stamina > 0)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -190,7 +190,7 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space) && cc.grounded)
+        if (Input.GetKeyDown(KeyCode.Space) && cc.grounded && stamina > 0)
         {
             stamina -= 10;
             staminaReduceTimer = Time.time + staminaReduceRate;
