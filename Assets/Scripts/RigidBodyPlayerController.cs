@@ -34,6 +34,7 @@ public class RigidBodyPlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
+        
         grounded = isGrounded();
         if (!grounded)
         {

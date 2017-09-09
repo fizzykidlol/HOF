@@ -7,7 +7,8 @@ public class checkpointGeneral : MonoBehaviour {
     public Transform spawn;
 
     
-    public GameObject killer;
+    public AI killer;
+    public AI killer2;
     public GameObject[] resetList;
     public Vector3[] OriginalPos;
     public ChasingTrigger enemyTrigger;
@@ -19,6 +20,7 @@ public class checkpointGeneral : MonoBehaviour {
     public gate gate;
     public macheteHallway machete;
     public GameObject closingDoor;
+    public ClosingDoor closingDoorTrigger;
     public acidTrapTrigger acid;
 
 
@@ -50,7 +52,12 @@ public class checkpointGeneral : MonoBehaviour {
 
     public void resetEnemy()
     {
-        killer.GetComponent<AI>().Reset();
+        killer.Reset();
+    }
+
+    public void resetEnemy2()
+    {
+        killer2.Reset();
     }
 
     public void resetLadder()
@@ -85,6 +92,7 @@ public class checkpointGeneral : MonoBehaviour {
     public void resetBlockage()
     {
         closingDoor.SetActive(false);
+        closingDoorTrigger.oneShot = false;
     }
 
     public void resetAcid()

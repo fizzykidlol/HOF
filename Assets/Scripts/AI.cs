@@ -20,6 +20,7 @@ public class AI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         startingPos = transform.position;
         myAgent = GetComponent<NavMeshAgent>();
         myAnimator = GetComponent<Animator>();
@@ -36,10 +37,11 @@ public class AI : MonoBehaviour {
 		}
 		else
 		{
-            myAnimator.Play("Idle");
+            myAnimator.Play("idle");
 		}
 		
 		transform.LookAt (target.position);
+        transform.eulerAngles = new Vector3(0,transform.eulerAngles.y, 0);
 	}
     void ChaseTarget(){
         distanceFromTarget = Vector3.Distance(target.position, transform.position);

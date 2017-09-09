@@ -52,6 +52,7 @@ public class Player : MonoBehaviour {
     public Camera cam;
     public float horizontalSpeed = 2.0F;
     public float verticalSpeed = 2.0F;
+    public MouseLook ml;
 
 
     // Use this for initialization
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         if (!dead)
         {
             regenStamina();
@@ -79,19 +81,18 @@ public class Player : MonoBehaviour {
                 respawn();
             }
         }
-        Vector3 fwd = cam.transform.forward;
-        fwd.Normalize();
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 vaxis = Vector3.Cross(fwd, Vector3.right);
-            transform.Rotate(vaxis, -Input.GetAxis("Mouse X"), Space.World);
-            Vector3 haxis = Vector3.Cross(fwd, Vector3.up);
-            transform.Rotate(haxis, -Input.GetAxis("Mouse Y"), Space.World);
-        }
-
-        float h = horizontalSpeed * Input.GetAxis("Mouse X");
-        float v = verticalSpeed * Input.GetAxis("Mouse Y");
-        transform.Rotate(v, h, 0);
+        //Vector3 fwd = cam.transform.forward;
+        //if (Input.GetMouseButton(0))
+        //{
+        //    Vector3 vaxis = Vector3.Cross(fwd, Vector3.right);
+        //    transform.Rotate(vaxis, -Input.GetAxis("Mouse X"), Space.World);
+        //    Vector3 haxis = Vector3.Cross(fwd, Vector3.up);
+        //    transform.Rotate(haxis, -Input.GetAxis("Mouse Y"), Space.World);
+        //}
+        //
+        //float h = horizontalSpeed * Input.GetAxis("Mouse X");
+        //float v = verticalSpeed * Input.GetAxis("Mouse Y");
+        //transform.Rotate(v, h, 0);
 
     }
 
@@ -114,14 +115,14 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
+    
     public void unPause()
     {
         pauseMenu.SetActive(false);
         paused = false;
         onTopMenu = false;
         Time.timeScale = 1;
-        StartCoroutine(DisableCursor());
+
     }
 
     private IEnumerator DisableCursor()
@@ -134,27 +135,28 @@ public class Player : MonoBehaviour {
     {
         if (stamina < 20 && !breathingSound.isPlaying)
         {
-            //breathingSound.Play();
+            breathingSound.Play();
         }
-        if (health == 2 && !lightHeartBeat.isPlaying)
-        {
+        //if (health == 2 && !lightHeartBeat.isPlaying)
+        //{
             //lightHeartBeat.Play();
-        }
-        else if (health == 1 && !heavyHeartbeat.isPlaying)
-        {
+       // }
+       // else if (health == 1 && !heavyHeartbeat.isPlaying)
+        //{
            // heavyHeartbeat.Play();
-        }
+       // }
     }
 
 
     public void respawn()
     {
+        transform.position = SpawnPoints[checkpointNum].position;
+        transform.localEulerAngles = new Vector3(0, 0, 0);
         dead = false;
+        stamina = maxStamina;
         deathScreen.SetActive(false);
         health = maxHealth;
         checkpoint.resetObjects();
-        transform.position = SpawnPoints[checkpointNum].position;
-        transform.rotation = SpawnPoints[checkpointNum].rotation;
 
         if (checkpointNum == 0)
         {
@@ -169,7 +171,6 @@ public class Player : MonoBehaviour {
         }
         if (checkpointNum == 2)
         {
-            print("lol");
             checkpoint.resetLadder();
             checkpoint.resetShadow();
             checkpoint.resetAcid();
@@ -178,10 +179,11 @@ public class Player : MonoBehaviour {
         if (checkpointNum == 3)
         {
             checkpoint.resetEnemy();
+            checkpoint.resetEnemy2();
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
         }
-
+        ml.enabled = true;
     }
 
     private void regenStamina()
@@ -196,7 +198,8 @@ public class Player : MonoBehaviour {
 
     private void reduceStamina()
     {
-        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time && cc.grounded && stamina > 0)
+        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time
+            && cc.grounded && stamina > 0)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {

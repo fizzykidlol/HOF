@@ -19,7 +19,7 @@ public class WinTrigger : MonoBehaviour {
     {
         if (other.transform.tag == "Player")
         {
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene(0);
         }
     }
 }
