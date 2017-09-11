@@ -183,6 +183,13 @@ public class Player : MonoBehaviour {
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
         }
+        if (checkpointNum == 4) {
+            checkpoint.resetEnemy();
+            checkpoint.resetEnemy2();
+            checkpoint.resetLadder();
+            checkpoint.resetLadder2();
+        }
+
         ml.enabled = true;
     }
 

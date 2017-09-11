@@ -9,6 +9,7 @@ public class AI : MonoBehaviour {
     private Animator myAnimator;
     public Transform target;
     public ChasingTrigger trigger;
+    public AudioSource attackSound;
 
     public bool chaseTarget = true;
     public float stoppingDistance = 2.5f;
@@ -66,6 +67,7 @@ public class AI : MonoBehaviour {
             target.GetComponent<Player>().takeDamage(1);
             myAnimator.SetTrigger("Attack");
             attackCooldown = Time.time + delayBetweenAttacks;
+            attackSound.Play();
         }
     }
 
