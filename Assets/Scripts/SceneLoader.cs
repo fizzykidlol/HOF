@@ -6,24 +6,40 @@ using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour {
 
-    public Text loadingText;
+    public GameObject loadingText;
+    public GameObject continueText;
+    public Slider loadingBar;
     public string level;
+    AsyncOperation async;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         StartCoroutine(loadNewScene());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        loadingText.color = new Color(loadingText.color.r, loadingText.color.g,
-            loadingText.color.b, Mathf.PingPong(Time.time, 1));
+        if (async.progress < 0.9f)
+        {
+            loadingBar.value = async.progress;
+        }
+        else
+        {
+            loadingText.SetActive(false);
+            loadingBar.gameObject.SetActive(false);
+            continueText.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                async.allowSceneActivation = true;
+            }
+        }
+        
 	}
 
     IEnumerator loadNewScene()
     {
-        AsyncOperation async = SceneManager.LoadSceneAsync(level);
-
+        async = SceneManager.LoadSceneAsync(level);
+        async.allowSceneActivation = false;
         while (!async.isDone)
         {
             yield return null;

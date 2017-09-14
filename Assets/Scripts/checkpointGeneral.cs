@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class checkpointGeneral : MonoBehaviour {
 
+    public GameObject checkpointIcon;
+    private bool iconOn = false;
+    private float iconTimer;
+    private float IconTime = 3;
     public Transform spawn;
 
     
@@ -22,6 +26,7 @@ public class checkpointGeneral : MonoBehaviour {
     public GameObject closingDoor;
     public ClosingDoor closingDoorTrigger;
     public acidTrapTrigger acid;
+    
 
 
 	// Use this for initialization
@@ -37,8 +42,20 @@ public class checkpointGeneral : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        CheckpointActivate();
 	}
+
+    public void CheckpointActivate()
+    {
+        if (iconOn)
+        {
+            if (iconTimer < Time.time)
+            {
+                checkpointIcon.SetActive(false);
+                iconOn = false;
+            }
+        }
+    }
 
     public void resetObjects()
     {
@@ -108,6 +125,9 @@ public class checkpointGeneral : MonoBehaviour {
             other.GetComponent<Player>().checkpointNum++;
             other.GetComponent<Player>().checkpoint = this;
             GetComponent<BoxCollider>().enabled = false;
+            iconOn = true;
+            checkpointIcon.SetActive(true);
+            iconTimer = Time.time + IconTime;
         }
     }
 

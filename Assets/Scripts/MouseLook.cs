@@ -7,7 +7,7 @@ public class MouseLook : MonoBehaviour
 
     public float mouseLookLowerLimit = -50f;
     public float mouseLookUpperLimit = 50f;
-    Vector2 mouseLook;
+    public Vector2 mouseLook;
     Vector2 smoothV;
     public float baseSensitivity = 5.0f;
     public float smoothing = 2.0f;
@@ -39,8 +39,6 @@ public class MouseLook : MonoBehaviour
             mouseLook.y = Mathf.Clamp(mouseLook.y, mouseLookLowerLimit, mouseLookUpperLimit);
             transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
             character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
-
-
         }
     }
 

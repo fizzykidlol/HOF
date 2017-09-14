@@ -21,7 +21,7 @@ public class WalkwayTrigger : MonoBehaviour {
         if (other.transform.tag == "Player")
         {
             target.on = true;
-            anim.Play("Walk");
+            anim.Play("walk");
         }
     }
 }

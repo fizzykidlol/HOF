@@ -5,42 +5,42 @@ using UnityEngine;
 public class Interactor : MonoBehaviour {
 
     public GameObject player;
-    public float interactionDistance = 1;
-    public GameObject[] interactables;
     public GameObject IntIcon;
     private bool interactableLookedAt = false;
+    public ColliderDetector detector;
+    public float detectionAngle = 30f;
 
-
-	// Use this for initialization
-	void Start () {
-        interactables = GameObject.FindGameObjectsWithTag("Interactable");
-	}
 	
 	// Update is called once per frame
 	void Update () {
         interactableLookedAt = false;
-        foreach (GameObject i in interactables)
+        if (detector.Collision)
         {
-            if (Vector3.Distance(player.transform.position, i.transform.position) < interactionDistance)
+            Vector3 targetDir = detector.returnTouchingObject().transform.position - transform.position;
+            float angle = Vector3.Angle(targetDir , transform.forward);
+            print(angle);
+            if (angle < detectionAngle)
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit))
+                if (Physics.Raycast(transform.position, targetDir, out hit))
                 {
                     if (hit.transform.tag == "Interactable")
                     {
                         interactableLookedAt = true;
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            i.GetComponent<Interactable>().activate();
-                        }
                     }
                 }
             }
+            
         }
+
 
         if (interactableLookedAt)
         {
             IntIcon.SetActive(true);
+            if (Input.GetMouseButton(0))
+            {
+                detector.returnTouchingObject().GetComponent<Interactable>().activate();
+            }
         }
         else
         {

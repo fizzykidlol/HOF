@@ -81,18 +81,6 @@ public class Player : MonoBehaviour {
                 respawn();
             }
         }
-        //Vector3 fwd = cam.transform.forward;
-        //if (Input.GetMouseButton(0))
-        //{
-        //    Vector3 vaxis = Vector3.Cross(fwd, Vector3.right);
-        //    transform.Rotate(vaxis, -Input.GetAxis("Mouse X"), Space.World);
-        //    Vector3 haxis = Vector3.Cross(fwd, Vector3.up);
-        //    transform.Rotate(haxis, -Input.GetAxis("Mouse Y"), Space.World);
-        //}
-        //
-        //float h = horizontalSpeed * Input.GetAxis("Mouse X");
-        //float v = verticalSpeed * Input.GetAxis("Mouse Y");
-        //transform.Rotate(v, h, 0);
 
     }
 
@@ -151,7 +139,7 @@ public class Player : MonoBehaviour {
     public void respawn()
     {
         transform.position = SpawnPoints[checkpointNum].position;
-        transform.localEulerAngles = new Vector3(0, 0, 0);
+        ml.mouseLook = new Vector2(SpawnPoints[checkpointNum].eulerAngles.y, 0);
         dead = false;
         stamina = maxStamina;
         deathScreen.SetActive(false);
@@ -183,7 +171,7 @@ public class Player : MonoBehaviour {
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
         }
-        ml.enabled = true;
+        
     }
 
     private void regenStamina()

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RigidBodyPlayerController : MonoBehaviour {
 
-    public float sideWalkSpeed = 0.9f;
-    public float backwardsSpeed = 0.3f;
+    public float sideWalkSpeedModifier = 0.9f;
+    public float backwardsSpeedModifier = 0.3f;
     public float walkSpeed = 5.0f;
     public float runSpeed = 12.0f;
     private float speed = 5.0f;
@@ -57,13 +57,13 @@ public class RigidBodyPlayerController : MonoBehaviour {
             // Calculate how fast we should be moving
             if (Input.GetAxis("Vertical") < 0)
             {
-                speedMod = backwardsSpeed;
+                speedMod = backwardsSpeedModifier;
             }
             if (climbing)
             {
                 speedMod = 0;
             }
-            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal") * sideWalkSpeed, 0, Input.GetAxis("Vertical") * speedMod);
+            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal") * sideWalkSpeedModifier, 0, Input.GetAxis("Vertical") * speedMod);
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *= speed;
 

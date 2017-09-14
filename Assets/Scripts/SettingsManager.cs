@@ -26,6 +26,7 @@ public class SettingsManager : MonoBehaviour
     public static float sensitivity = 1;
 
     public PauseMenu menu;
+    public MainMenu mainMenu;
     // Use this for initialization
     void OnEnable()
     {
@@ -93,15 +94,29 @@ public class SettingsManager : MonoBehaviour
 
     public void OnMusicVolumeChanged()
     {
-        musicSource.volume = gameSettings.musicVolume = musicVolumeSlider.value;
+        try
+        {
+            musicSource.volume = gameSettings.musicVolume = musicVolumeSlider.value;
+        }
+        catch
+        {
+            gameSettings.musicVolume = musicVolumeSlider.value;
+        }
     }
 
     public void OnSFXVolumeChanged()
     {
-        gameSettings.SFXVolume = SFXVolumeSlider.value;
-        foreach(AudioSource source in SFXSources)
+        try
         {
-            source.volume = SFXVolumeSlider.value;
+            foreach (AudioSource source in SFXSources)
+            {
+                source.volume = SFXVolumeSlider.value;
+                gameSettings.SFXVolume = SFXVolumeSlider.value;
+            }
+        }
+        catch
+        {
+            gameSettings.SFXVolume = SFXVolumeSlider.value;
         }
     }
 
@@ -119,7 +134,14 @@ public class SettingsManager : MonoBehaviour
     public void onApplyButtonPress()
     {
         SaveSettings();
-        menu.exitOptions();
+        try
+        {
+            menu.exitOptions();
+        }
+        catch
+        {
+            mainMenu.exitOptions();
+        }
     }
 
     public void loadSettings()

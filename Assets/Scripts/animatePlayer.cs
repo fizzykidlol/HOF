@@ -22,42 +22,46 @@ public class animatePlayer : MonoBehaviour {
         if (!player.dead)
         {
             state = animator.GetCurrentAnimatorStateInfo(0);
-
-            if (pc.grounded && Input.GetKey("w")  
+            if (!state.IsName("Slide") && !state.IsName("Jumping") && !state.IsName("Wallrun"))
+            {
+                if (pc.grounded && Input.GetKey("w")
                 && !Input.GetKey("d") && !Input.GetKey("a") && !state.IsName("Slide"))
-            {
-                if (pc.sprinting && !state.IsName("Run"))
                 {
-                    Run();
-                }
-                else if(!state.IsName("Walking") && !pc.sprinting)
-                {
-                    Walk();
+                    if (pc.sprinting && !state.IsName("Run"))
+                    {
+                        Run();
+                    }
+                    else if (!state.IsName("Walking") && !pc.sprinting)
+                    {
+                        Walk();
+                    }
+
                 }
 
+                if ((Input.GetKeyUp("w") && (state.IsName("Walking") || state.IsName("Run"))) ||
+                    (Input.GetKeyUp("d") && state.IsName("RightStrafe")) ||
+                    (Input.GetKeyUp("a") && state.IsName("LeftStrafe")))
+                {
+                    Idle();
+                }
+
+                if (pc.grounded && Input.GetKey("d") && !state.IsName("RightStrafe"))
+                {
+                    RightStrafe();
+                }
+
+                if (pc.grounded && Input.GetKey("a") && !state.IsName("LeftStrafe"))
+                {
+                    LeftStrafe();
+                }
             }
 
-            if ((Input.GetKeyUp("w") && (state.IsName("Walking") || state.IsName("Run"))) ||
-                (Input.GetKeyUp("d") && state.IsName("RightStrafe")) ||
-                (Input.GetKeyUp("a") && state.IsName("LeftStrafe")))
-            {
-                Idle();
-            }
 
             if (pc.grounded && Input.GetKey("q") && !state.IsName("Slide"))
             {
                 Slide();
             }
 
-            if (pc.grounded && Input.GetKey("d") && !state.IsName("RightStrafe"))
-            {
-                RightStrafe();
-            }
-
-            if (pc.grounded && Input.GetKey("a") && !state.IsName("LeftStrafe"))
-            {
-                LeftStrafe();
-            }
 
             if (pc.grounded && Input.GetKey(KeyCode.Space) && !state.IsName("Jumping"))
             {
@@ -69,7 +73,7 @@ public class animatePlayer : MonoBehaviour {
                 Climb();
             }
 
-            if (wr.wallRun && !state.IsName("Climb"))
+            if (wr.wallRun && !state.IsName("Wallrun"))
             {
                 Wallrun();
             }
