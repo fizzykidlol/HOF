@@ -38,11 +38,11 @@ public class Silde : MonoBehaviour {
 
         if (cc.sliding && FPSCamera.localPosition.y > crouchCameraHeight)
         {
-            FPSCamera.transform.position += -transform.up * 0.3f;
+            //FPSCamera.transform.position += -transform.up * 0.3f;
         }
         else if (!cc.sliding && FPSCamera.localPosition.y < cameraPosition.y)
         {
-            FPSCamera.transform.position += transform.up * 0.3f;
+            //FPSCamera.transform.position += transform.up * 0.3f;
         }
     }
 }

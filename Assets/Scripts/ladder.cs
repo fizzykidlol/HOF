@@ -7,6 +7,7 @@ public class ladder : MonoBehaviour {
     public Transform Target;
     private GameObject player;
     private bool playerLock = false;
+    public bool transitionLock;
 
 	// Use this for initialization
 	void Start () {
@@ -17,15 +18,17 @@ public class ladder : MonoBehaviour {
 	void Update () {
 		if (playerLock && player.transform.position.y > Target.position.y)
         {
-            float step = 2 * Time.deltaTime;
+            float step = 4 * Time.deltaTime;
             player.transform.position = Vector3.MoveTowards(player.transform.position, Target.position, step);
+            transitionLock = true;
+            player.GetComponent<RigidBodyPlayerController>().climbing = false;
         }
 
         if (Vector3.Distance(player.transform.position, Target.position) < 0.1f)
         {
             playerLock = false;
-            player.GetComponent<RigidBodyPlayerController>().climbing = false;
             player.GetComponent<RigidBodyPlayerController>().rb.useGravity = true;
+            transitionLock = false;
         }
 	}
 
@@ -36,12 +39,13 @@ public class ladder : MonoBehaviour {
             playerLock = true;
             player.GetComponent<RigidBodyPlayerController>().climbing = true;
             player.GetComponent<RigidBodyPlayerController>().rb.useGravity = false;
+            player.GetComponent<RigidBodyPlayerController>().rb.velocity = new Vector3(0, 0, 0);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform.tag == "Wall Collider")
+        if (other.transform.tag == "Wall Collider" && !transitionLock)
         {
             playerLock = false;
             player.GetComponent<RigidBodyPlayerController>().climbing = false;

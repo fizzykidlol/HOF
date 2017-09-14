@@ -60,6 +60,12 @@ public class animatePlayer : MonoBehaviour {
             if (pc.grounded && Input.GetKey("q") && !state.IsName("Slide"))
             {
                 Slide();
+                transform.position += transform.up * 0.5f;
+            }
+            if (pc.grounded && Input.GetKeyUp("q"))
+            {
+                Idle();
+                transform.position += -transform.up * 0.5f;
             }
 
 
