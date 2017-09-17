@@ -593,8 +593,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
-  cloudProjectId: 69b77578-3947-4d32-8e31-8cac8becc156
-  projectName: HOF
-  organizationId: hof-s
+  cloudProjectId: 9a4689ee-5229-4fd5-a6e1-e0dfafc0299d
+  projectName: HOF (2)
+  organizationId: jakob-hamilton
   cloudEnabled: 0
   enableNewInputSystem: 0
