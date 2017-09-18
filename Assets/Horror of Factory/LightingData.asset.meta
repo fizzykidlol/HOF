@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: e95249b0e1652e047a4c7b36dd5ce7c7
 timeCreated: 1504335639
+=======
+guid: c52e8d77f57ae409ebc1bb6c4601c45b
+timeCreated: 1505398554
+>>>>>>> Lester
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 25800000
