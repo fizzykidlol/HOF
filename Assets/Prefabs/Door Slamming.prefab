@@ -29,25 +29,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1432797395024032
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4525838417417552}
-  - component: {fileID: 33139747153467732}
-  - component: {fileID: 65296930508086056}
-  - component: {fileID: 23914876875858916}
-  - component: {fileID: 114588230040878880}
-  m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1853724090967884
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +54,7 @@ GameObject:
   - component: {fileID: 4225735219656796}
   - component: {fileID: 33664542173606948}
   - component: {fileID: 23841954729488720}
-  - component: {fileID: 114219464963647980}
+  - component: {fileID: 114272140201629328}
   m_Layer: 0
   m_Name: Door Pivot
   m_TagString: Untagged
@@ -87,14 +68,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1929421829755066}
-  m_LocalRotation: {x: -0, y: -0.31099954, z: -0, w: 0.95041007}
-  m_LocalPosition: {x: 0.68, y: 0.867, z: -4.141}
+  m_LocalRotation: {x: 0, y: -0.9547349, z: 0, w: 0.2974582}
+  m_LocalPosition: {x: 0.6800003, y: 0.867, z: -4.141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4426593855579612}
   m_Father: {fileID: 4739623118383720}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -36.239002, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -145.39, z: 0}
 --- !u!4 &4426593855579612
 Transform:
   m_ObjectHideFlags: 1
@@ -102,25 +83,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1422149811707584}
   m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0.07099992, y: -0.14900005, z: -0.73700047}
-  m_LocalScale: {x: 71.35773, y: 1, z: 108.15148}
+  m_LocalPosition: {x: 0.07099977, y: -0.08700001, z: -0.7370006}
+  m_LocalScale: {x: 71.35775, y: 1, z: 115.50677}
   m_Children: []
   m_Father: {fileID: 4225735219656796}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
---- !u!4 &4525838417417552
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432797395024032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.54, y: 2.11, z: -8.8}
-  m_LocalScale: {x: 5.4531016, y: 5.2207747, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4739623118383720}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4739623118383720
 Transform:
   m_ObjectHideFlags: 1
@@ -128,11 +96,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1853724090967884}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.493, y: 0.45899987, z: 18.487}
+  m_LocalPosition: {x: 21.398, y: 0.35, z: 4.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4225735219656796}
-  - {fileID: 4525838417417552}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -174,7 +141,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1929421829755066}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -200,45 +167,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!23 &23914876875858916
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432797395024032}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &33139747153467732
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432797395024032}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &33664542173606948
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -263,23 +191,11 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300022, guid: 8ea9fa0e57a6b244aa812a2c47947edc, type: 3}
---- !u!65 &65296930508086056
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432797395024032}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114219464963647980
+--- !u!114 &114272140201629328
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -291,20 +207,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   on: 0
-  slamSpeed: 20
+  slamSpeed: 10
   swung: 0
   slammed: 0
   doorSwing: {fileID: 0}
   slamSound: {fileID: 0}
---- !u!114 &114588230040878880
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432797395024032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0378ffd6d4fbd9d46af28eee67c818c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  door: {fileID: 114219464963647980}
+  targetRotation: -90

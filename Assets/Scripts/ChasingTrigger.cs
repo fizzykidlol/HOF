@@ -6,6 +6,7 @@ using UnityEngine;
 public class ChasingTrigger : MonoBehaviour {
 	public bool canChasing = false;
     public GameObject enemy;
+    public 
 
 
     void OnTriggerEnter(Collider other) {
@@ -13,6 +14,7 @@ public class ChasingTrigger : MonoBehaviour {
             //enemy.SetActive(true);
             canChasing = true;
 			//transform.GetComponent<EnemyNavi> ().enabled = true;
+            GameObject.Find("Killer with Machete(T-pose)").GetComponent<AudioSource>().enabled = true;
 		}
 	}
 
