@@ -17,6 +17,7 @@ TagManager:
   - NoRaycast
   - test
   - checkpoint text
+  - Battery
   layers:
   - Default
   - TransparentFX

@@ -6,6 +6,7 @@ public class doorSlamTrigger : MonoBehaviour {
 
     public SlammingDoor door;
 
+
 	// Use this for initialization
 	void Start () {
 		
@@ -21,6 +22,7 @@ public class doorSlamTrigger : MonoBehaviour {
         if (other.transform.tag == "Player")
         {
             door.slam();
+
         }
         
     }

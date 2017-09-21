@@ -125,6 +125,6 @@ public class RigidBodyPlayerController : MonoBehaviour {
 
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.05f);
+        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.1f);
     }
 }

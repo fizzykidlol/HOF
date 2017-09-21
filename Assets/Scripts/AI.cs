@@ -10,6 +10,8 @@ public class AI : MonoBehaviour
     private Animator myAnimator;
     public Transform target;
     public ChasingTrigger trigger;
+    public AudioSource macheteSound;
+    private AnimatorStateInfo state;
 
     public bool chaseTarget = true;
     public float stoppingDistance = 2.5f;
@@ -32,16 +34,19 @@ public class AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        state = myAnimator.GetNextAnimatorStateInfo(0);
         if (trigger.canChasing)
         {
             ChaseTarget();
-
-            myAnimator.Play("walk");
         }
-        else
+        else if (!state.IsName("attack"))
         {
             myAnimator.Play("idle");
+        }
+
+        if (chaseTarget && !state.IsName("walk") && !state.IsName("attack"))
+        {
+            myAnimator.Play("walk");
         }
 
         transform.LookAt(target.position);
@@ -54,30 +59,38 @@ public class AI : MonoBehaviour
         {
             chaseTarget = true;
         }
+
         else
         {
             chaseTarget = false;
             Attack();
         }
+
         if (chaseTarget)
         {
             myAgent.SetDestination(target.position);
-            myAnimator.SetBool("isChasing", true);
+            //myAnimator.SetBool("isChasing", true);
         }
-        else
-        {
-            myAnimator.SetBool("isChasing", false);
-        }
+        //else
+        //{
+        //    myAnimator.SetBool("isChasing", false);
+        //}
     }
     void Attack()
     {
         if (Time.time > attackCooldown)
         {
             Debug.Log("Attack!");
-            target.GetComponent<Player>().takeDamage(1);
-            myAnimator.SetTrigger("Attack");
+            //myAnimator.SetTrigger("Attack");
+            myAnimator.Play("attack");
             attackCooldown = Time.time + delayBetweenAttacks;
         }
+    }
+
+    void damagePlayer()
+    {
+        target.GetComponent<Player>().takeDamage(1);
+        macheteSound.Play();
     }
 
     public void Reset()

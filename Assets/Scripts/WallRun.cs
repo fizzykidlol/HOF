@@ -43,7 +43,7 @@ public class WallRun : MonoBehaviour {
         
         RaycastHit hit = new RaycastHit();
         if (!cc.grounded && (rb.velocity.x > 0 || rb.velocity.z > 0) && cc.sprinting 
-            && Time.time > wallRunTimer && reset && rb.velocity.y <= 0 && wc.Collision)
+            && Time.time > wallRunTimer && reset && rb.velocity.y <= 0 && wc.collision)
         {
             if (Physics.Raycast(transform.position, -transform.right, out hit, raycastRange))
             {

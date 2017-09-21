@@ -14,11 +14,10 @@ public class Interactor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         interactableLookedAt = false;
-        if (detector.Collision)
+        if (detector.collision)
         {
             Vector3 targetDir = detector.returnTouchingObject().transform.position - transform.position;
             float angle = Vector3.Angle(targetDir , transform.forward);
-            print(angle);
             if (angle < detectionAngle)
             {
                 RaycastHit hit;

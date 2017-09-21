@@ -12,5 +12,8 @@ EditorBuildSettings:
     path: Assets/loading.unity
     guid: 0f8dad294b6d2ce45a8234bc555cba51
   - enabled: 1
-    path: Assets/Horror of Factory.unity
-    guid: 82f88b72b41665a418d572fbbc9c3cb9
+    path: Assets/WEIJIAN HOF.unity
+    guid: 05692a627d9c43043894fae5d9a468db
+  - enabled: 1
+    path: Assets/Win Screen.unity
+    guid: 9dc78cee3cb08bf4bb70e0483b373e07

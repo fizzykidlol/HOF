@@ -12,8 +12,8 @@ public class Player : MonoBehaviour {
     private float health;
     public bool dead = false;
     public GameObject deathScreen;
-    public AudioSource lightHeartBeat;
-    public AudioSource heavyHeartbeat;   
+    public GameObject damage1;
+    public GameObject damage2;
 
     //stamina
     public float maxStamina = 100;
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
         {
             regenStamina();
             reduceStamina();
-            walkingSounds();
+            //walkingSounds();
             healthAndStaminaSounds();
             pause();
         }
@@ -145,6 +145,7 @@ public class Player : MonoBehaviour {
         deathScreen.SetActive(false);
         health = maxHealth;
         checkpoint.resetObjects();
+        changeHealthUI();
 
         if (checkpointNum == 0)
         {
@@ -210,6 +211,11 @@ public class Player : MonoBehaviour {
         }
     }
     
+    public void playWalkOnStoneSound()
+    {
+        Instantiate(walkOnStoneSound, transform.position, transform.rotation);
+    }
+
     private void walkingSounds()
     {
         if (cc.grounded && Time.time > stepTimer && (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s")  || Input.GetKey("d")))
@@ -263,10 +269,29 @@ public class Player : MonoBehaviour {
     public void takeDamage(float damage)
     {
         health -= damage;
+        changeHealthUI();
         //healthSlider.value = health / maxHealth;
         if (health <= 0)
         {
             gameOver();
+        }
+    }
+
+    public void changeHealthUI()
+    {
+        if (health == 2)
+        {
+            damage1.SetActive(true);
+        }
+        if (health == 1)
+        {
+            damage2.SetActive(true);
+            damage1.SetActive(false);
+        }
+        if (health == 0 || health == 3)
+        {
+            damage1.SetActive(false);
+            damage2.SetActive(false);
         }
     }
 

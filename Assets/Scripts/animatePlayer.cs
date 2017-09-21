@@ -6,15 +6,23 @@ using UnityEngine;
 
 public class animatePlayer : MonoBehaviour {
 
+    private Vector3 origionalPos;
     private Animator animator;
     public RigidBodyPlayerController pc;
     public Player player;
     public WallRun wr;
     public AnimatorStateInfo state;
+    public float slideMovementVertical = 0.5f;
+    public float slideMovementHorizontal = 0.2f;
+    public float climbVerticalMovement = 0.1f;
+    public Camera mainCamera;
+    private float origionalCloseRange;
+    public float increasedCloseRange;
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
+        origionalPos = transform.localPosition;
 	}
 	
 	// Update is called once per frame
@@ -22,7 +30,7 @@ public class animatePlayer : MonoBehaviour {
         if (!player.dead)
         {
             state = animator.GetCurrentAnimatorStateInfo(0);
-            if (!state.IsName("Slide") && !state.IsName("Jumping") && !state.IsName("Wallrun"))
+            if (!state.IsName("Slide") && !state.IsName("Jumping") && !state.IsName("Wallrun") && !pc.climbing)
             {
                 if (pc.grounded && Input.GetKey("w")
                 && !Input.GetKey("d") && !Input.GetKey("a") && !state.IsName("Slide"))
@@ -56,16 +64,20 @@ public class animatePlayer : MonoBehaviour {
                 }
             }
 
+            if (!state.IsName("Climb") && !state.IsName("Slide"))
+            {
+                transform.localPosition = origionalPos;
+            }
 
-            if (pc.grounded && Input.GetKey("q") && !state.IsName("Slide"))
+            if (pc.grounded && Input.GetKeyDown("q") && !state.IsName("Slide"))
             {
                 Slide();
-                transform.position += transform.up * 0.5f;
+                transform.position += transform.up * slideMovementVertical;
+                transform.position += -transform.forward * slideMovementHorizontal;
             }
             if (pc.grounded && Input.GetKeyUp("q"))
             {
                 Idle();
-                transform.position += -transform.up * 0.5f;
             }
 
 
@@ -74,15 +86,12 @@ public class animatePlayer : MonoBehaviour {
                 Jump();
             }
 
-            if (pc.climbing && Input.GetKey("w") && !state.IsName("Climb"))
+            if (pc.climbing && (Input.GetKey("w") || Input.GetKey("s")) && !state.IsName("Climb"))
             {
-                Climb();
+                //Climb();
+                //transform.localPosition = origionalPos + Vector3.up * climbVerticalMovement;
             }
 
-            if (wr.wallRun && !state.IsName("Wallrun"))
-            {
-                Wallrun();
-            }
         }
     }
 
@@ -128,6 +137,6 @@ public class animatePlayer : MonoBehaviour {
 
     public void Climb()
     {
-        animator.Play("Climb");
+       animator.Play("Climb");
     }
 }

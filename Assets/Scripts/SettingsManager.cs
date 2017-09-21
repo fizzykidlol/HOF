@@ -24,6 +24,7 @@ public class SettingsManager : MonoBehaviour
     public GameSettings gameSettings;
 
     public static float sensitivity = 1;
+    public static float SFXvolume = 1;
 
     public PauseMenu menu;
     public MainMenu mainMenu;
@@ -106,6 +107,7 @@ public class SettingsManager : MonoBehaviour
 
     public void OnSFXVolumeChanged()
     {
+        SFXvolume = SFXVolumeSlider.value;
         try
         {
             foreach (AudioSource source in SFXSources)
@@ -154,8 +156,9 @@ public class SettingsManager : MonoBehaviour
         textureQualityDropdown.value = gameSettings.textureQuality;
         resolutionDropdown.value = gameSettings.resolutionIndex;
         fullscreenToggle.isOn = gameSettings.fullscreen;
-        SFXVolumeSlider.value = gameSettings.SFXVolume;
-        sensitivitySlider.value = gameSettings.sensitivity;
+        SFXvolume = SFXVolumeSlider.value = gameSettings.SFXVolume;
+        sensitivity = sensitivitySlider.value = gameSettings.sensitivity;
+        
 
         resolutionDropdown.RefreshShownValue();
     }
