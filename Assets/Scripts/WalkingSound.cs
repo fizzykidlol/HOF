@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WalkingSound : MonoBehaviour {
 
-    private GameObject playerSFX;
+    public GameObject playerSFX;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +12,7 @@ public class WalkingSound : MonoBehaviour {
         AudioSource source = GetComponent<AudioSource>();
         source.pitch = pitch;
         playerSFX = GameObject.FindGameObjectWithTag("SFX");
-        source.volume = playerSFX.GetComponent<AudioSource>().volume;
+        source.volume = SettingsManager.SFXvolume;
         source.Play();
         Destroy(gameObject, 3);
 	}

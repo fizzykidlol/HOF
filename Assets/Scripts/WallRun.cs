@@ -14,6 +14,8 @@ public class WallRun : MonoBehaviour {
     public bool wallRun = false;
     public bool reset = true;
     public float wallRunVel = 5;
+    public ColliderDetector wc;
+    public float raycastRange = 1.5f;
 
     void Start() {
         cc = GetComponent<RigidBodyPlayerController>();
@@ -41,9 +43,9 @@ public class WallRun : MonoBehaviour {
         
         RaycastHit hit = new RaycastHit();
         if (!cc.grounded && (rb.velocity.x > 0 || rb.velocity.z > 0) && cc.sprinting 
-            && Time.time > wallRunTimer && reset && rb.velocity.y <= 0)
+            && Time.time > wallRunTimer && reset && rb.velocity.y <= 0 && wc.collision)
         {
-            if (Physics.Raycast(transform.position, -transform.right, out hit, 1))
+            if (Physics.Raycast(transform.position, -transform.right, out hit, raycastRange))
             {
                 if (hit.transform.tag == "Wall")
                 {
@@ -57,7 +59,7 @@ public class WallRun : MonoBehaviour {
                     speedBoost();
                 }
             }
-            else if (Physics.Raycast(transform.position, transform.right, out hit, 1))
+            else if (Physics.Raycast(transform.position, transform.right, out hit, raycastRange))
             {
                 if (hit.transform.tag == "Wall")
                 {

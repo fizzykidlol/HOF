@@ -12,8 +12,8 @@ public class Player : MonoBehaviour {
     private float health;
     public bool dead = false;
     public GameObject deathScreen;
-    public AudioSource lightHeartBeat;
-    public AudioSource heavyHeartbeat;   
+    public GameObject damage1;
+    public GameObject damage2;
 
     //stamina
     public float maxStamina = 100;
@@ -49,6 +49,11 @@ public class Player : MonoBehaviour {
     public int checkpointNum;
     public Transform[] SpawnPoints;
 
+    public Camera cam;
+    public float horizontalSpeed = 2.0F;
+    public float verticalSpeed = 2.0F;
+    public MouseLook ml;
+
 
     // Use this for initialization
     void Start () {
@@ -60,11 +65,12 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         if (!dead)
         {
             regenStamina();
             reduceStamina();
-            walkingSounds();
+            //walkingSounds();
             healthAndStaminaSounds();
             pause();
         }
@@ -75,7 +81,8 @@ public class Player : MonoBehaviour {
                 respawn();
             }
         }
-	}
+
+    }
 
     //activate pause menu
     private void pause()
@@ -96,14 +103,14 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
+    
     public void unPause()
     {
         pauseMenu.SetActive(false);
         paused = false;
         onTopMenu = false;
         Time.timeScale = 1;
-        StartCoroutine(DisableCursor());
+
     }
 
     private IEnumerator DisableCursor()
@@ -118,25 +125,27 @@ public class Player : MonoBehaviour {
         {
             breathingSound.Play();
         }
-        if (health == 2 && !lightHeartBeat.isPlaying)
-        {
-            lightHeartBeat.Play();
-        }
-        else if (health == 1 && !heavyHeartbeat.isPlaying)
-        {
-            heavyHeartbeat.Play();
-        }
+        //if (health == 2 && !lightHeartBeat.isPlaying)
+        //{
+            //lightHeartBeat.Play();
+       // }
+       // else if (health == 1 && !heavyHeartbeat.isPlaying)
+        //{
+           // heavyHeartbeat.Play();
+       // }
     }
 
 
     public void respawn()
     {
+        transform.position = SpawnPoints[checkpointNum].position;
+        ml.mouseLook = new Vector2(SpawnPoints[checkpointNum].eulerAngles.y, 0);
         dead = false;
+        stamina = maxStamina;
         deathScreen.SetActive(false);
         health = maxHealth;
         checkpoint.resetObjects();
-        transform.position = SpawnPoints[checkpointNum].position;
-        transform.rotation = SpawnPoints[checkpointNum].rotation;
+        changeHealthUI();
 
         if (checkpointNum == 0)
         {
@@ -151,7 +160,6 @@ public class Player : MonoBehaviour {
         }
         if (checkpointNum == 2)
         {
-            print("lol");
             checkpoint.resetLadder();
             checkpoint.resetShadow();
             checkpoint.resetAcid();
@@ -160,10 +168,11 @@ public class Player : MonoBehaviour {
         if (checkpointNum == 3)
         {
             checkpoint.resetEnemy();
+            checkpoint.resetEnemy2();
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
         }
-
+        
     }
 
     private void regenStamina()
@@ -178,7 +187,8 @@ public class Player : MonoBehaviour {
 
     private void reduceStamina()
     {
-        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time && cc.grounded)
+        if ((rb.velocity.x != 0 || rb.velocity.z != 0) && staminaReduceTimer < Time.time
+            && cc.grounded && stamina > 0)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -190,7 +200,7 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space) && cc.grounded)
+        if (Input.GetKeyDown(KeyCode.Space) && cc.grounded && stamina > 0)
         {
             stamina -= 10;
             staminaReduceTimer = Time.time + staminaReduceRate;
@@ -201,6 +211,11 @@ public class Player : MonoBehaviour {
         }
     }
     
+    public void playWalkOnStoneSound()
+    {
+        Instantiate(walkOnStoneSound, transform.position, transform.rotation);
+    }
+
     private void walkingSounds()
     {
         if (cc.grounded && Time.time > stepTimer && (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s")  || Input.GetKey("d")))
@@ -254,10 +269,29 @@ public class Player : MonoBehaviour {
     public void takeDamage(float damage)
     {
         health -= damage;
+        changeHealthUI();
         //healthSlider.value = health / maxHealth;
         if (health <= 0)
         {
             gameOver();
+        }
+    }
+
+    public void changeHealthUI()
+    {
+        if (health == 2)
+        {
+            damage1.SetActive(true);
+        }
+        if (health == 1)
+        {
+            damage2.SetActive(true);
+            damage1.SetActive(false);
+        }
+        if (health == 0 || health == 3)
+        {
+            damage1.SetActive(false);
+            damage2.SetActive(false);
         }
     }
 

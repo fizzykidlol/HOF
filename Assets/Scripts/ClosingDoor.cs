@@ -5,14 +5,17 @@ using UnityEngine;
 public class ClosingDoor : MonoBehaviour {
     public GameObject closingDoor;
     public GameObject Killer;
-
+    public AudioSource collapse;
+    public bool oneShot = false;
 
     private void OnTriggerEnter(Collider other)
     {
-		if (other.transform.tag == "Player")
+		if (other.transform.tag == "Player" && ! oneShot)
 		{
+            collapse.Play();
 			closingDoor.SetActive(true);
             Killer.SetActive(false);
+            oneShot = true;
 		}
 	}
 }

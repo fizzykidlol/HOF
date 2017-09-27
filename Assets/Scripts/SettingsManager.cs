@@ -14,6 +14,7 @@ public class SettingsManager : MonoBehaviour
     public Dropdown vSyncDropdown;
     public Slider musicVolumeSlider;
     public Slider SFXVolumeSlider;
+    public Slider sensitivitySlider;
     public Button applyButton;
 
     public AudioSource musicSource;
@@ -22,7 +23,11 @@ public class SettingsManager : MonoBehaviour
     public Resolution[] resolutions;
     public GameSettings gameSettings;
 
+    public static float sensitivity = 1;
+    public static float SFXvolume = 1;
+
     public PauseMenu menu;
+    public MainMenu mainMenu;
     // Use this for initialization
     void OnEnable()
     {
@@ -36,6 +41,7 @@ public class SettingsManager : MonoBehaviour
         vSyncDropdown.onValueChanged.AddListener(delegate { OnVSyncChange(); });
         musicVolumeSlider.onValueChanged.AddListener(delegate { OnMusicVolumeChanged(); });
         SFXVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChanged(); });
+        sensitivitySlider.onValueChanged.AddListener(delegate { OnSensitivityChanged(); });
         applyButton.onClick.AddListener(delegate { onApplyButtonPress(); });
 
         resolutions = Screen.resolutions;
@@ -56,6 +62,7 @@ public class SettingsManager : MonoBehaviour
             vSyncDropdown.value = QualitySettings.vSyncCount;
             textureQualityDropdown.value = QualitySettings.masterTextureLimit;
             fullscreenToggle.isOn = Screen.fullScreen;
+            sensitivitySlider.value = 1;
         }
     }
 
@@ -88,16 +95,36 @@ public class SettingsManager : MonoBehaviour
 
     public void OnMusicVolumeChanged()
     {
-        musicSource.volume = gameSettings.musicVolume = musicVolumeSlider.value;
+        try
+        {
+            musicSource.volume = gameSettings.musicVolume = musicVolumeSlider.value;
+        }
+        catch
+        {
+            gameSettings.musicVolume = musicVolumeSlider.value;
+        }
     }
 
     public void OnSFXVolumeChanged()
     {
-        gameSettings.SFXVolume = SFXVolumeSlider.value;
-        foreach(AudioSource source in SFXSources)
+        SFXvolume = SFXVolumeSlider.value;
+        try
         {
-            source.volume = SFXVolumeSlider.value;
+            foreach (AudioSource source in SFXSources)
+            {
+                source.volume = SFXVolumeSlider.value;
+                gameSettings.SFXVolume = SFXVolumeSlider.value;
+            }
         }
+        catch
+        {
+            gameSettings.SFXVolume = SFXVolumeSlider.value;
+        }
+    }
+
+    public void OnSensitivityChanged()
+    {
+        gameSettings.sensitivity = sensitivity = sensitivitySlider.value;
     }
 
     public void SaveSettings()
@@ -109,7 +136,14 @@ public class SettingsManager : MonoBehaviour
     public void onApplyButtonPress()
     {
         SaveSettings();
-        menu.exitOptions();
+        try
+        {
+            menu.exitOptions();
+        }
+        catch
+        {
+            mainMenu.exitOptions();
+        }
     }
 
     public void loadSettings()
@@ -122,6 +156,9 @@ public class SettingsManager : MonoBehaviour
         textureQualityDropdown.value = gameSettings.textureQuality;
         resolutionDropdown.value = gameSettings.resolutionIndex;
         fullscreenToggle.isOn = gameSettings.fullscreen;
+        SFXvolume = SFXVolumeSlider.value = gameSettings.SFXVolume;
+        sensitivity = sensitivitySlider.value = gameSettings.sensitivity;
+        
 
         resolutionDropdown.RefreshShownValue();
     }

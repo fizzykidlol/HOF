@@ -3,68 +3,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AI : MonoBehaviour {
+public class AI : MonoBehaviour
+{
     private Vector3 startingPos;
     private NavMeshAgent myAgent;
     private Animator myAnimator;
     public Transform target;
     public ChasingTrigger trigger;
+    public AudioSource macheteSound;
+    private AnimatorStateInfo state;
 
     public bool chaseTarget = true;
     public float stoppingDistance = 2.5f;
     public float delayBetweenAttacks = 1.5f;
-   
+
     private float attackCooldown;
 
     private float distanceFromTarget;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         startingPos = transform.position;
         myAgent = GetComponent<NavMeshAgent>();
         myAnimator = GetComponent<Animator>();
         myAgent.stoppingDistance = stoppingDistance;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        
-		if (trigger.canChasing)
-		{    ChaseTarget();
-			
-            myAnimator.Play("Run");
-		}
-		else
-		{
-            myAnimator.Play("Idle");
-		}
-		
-		transform.LookAt (target.position);
-	}
-    void ChaseTarget(){
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        state = myAnimator.GetNextAnimatorStateInfo(0);
+        if (trigger.canChasing)
+        {
+            ChaseTarget();
+        }
+        else if (!state.IsName("attack"))
+        {
+            myAnimator.Play("idle");
+        }
+
+        if (chaseTarget && !state.IsName("walk") && !state.IsName("attack"))
+        {
+            myAnimator.Play("walk");
+        }
+
+        transform.LookAt(target.position);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+    }
+    void ChaseTarget()
+    {
         distanceFromTarget = Vector3.Distance(target.position, transform.position);
-        if (distanceFromTarget >= stoppingDistance){
+        if (distanceFromTarget >= stoppingDistance)
+        {
             chaseTarget = true;
         }
-        else{
+
+        else
+        {
             chaseTarget = false;
             Attack();
         }
-        if(chaseTarget){
+
+        if (chaseTarget)
+        {
             myAgent.SetDestination(target.position);
-            myAnimator.SetBool("isChasing", true);
+            //myAnimator.SetBool("isChasing", true);
         }
-        else{
-            myAnimator.SetBool("isChasing", false);
-        }
+        //else
+        //{
+        //    myAnimator.SetBool("isChasing", false);
+        //}
     }
-    void Attack(){
-        if(Time.time > attackCooldown){
+    void Attack()
+    {
+        if (Time.time > attackCooldown)
+        {
             Debug.Log("Attack!");
-            target.GetComponent<Player>().takeDamage(1);
-            myAnimator.SetTrigger("Attack");
+            //myAnimator.SetTrigger("Attack");
+            myAnimator.Play("attack");
             attackCooldown = Time.time + delayBetweenAttacks;
         }
+    }
+
+    void damagePlayer()
+    {
+        target.GetComponent<Player>().takeDamage(1);
+        macheteSound.Play();
     }
 
     public void Reset()

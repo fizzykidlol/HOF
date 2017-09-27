@@ -1,0 +1,19 @@
+*.resS filter=lfs diff=lfs merge=lfs -text
+*.prefab binary
+*.unity binary
+*.anim binary
+*.controller binary
+*.mat binary
+*.asset binary
+*.png binary
+*.jpeg binary
+*.jpg binary
+*.wav binary
+*.mp3 binary
+
+[merge]
+tool = unityyamlmerge
+ 
+[mergetool "unityyamlmerge"]
+trustExitCode = false
+cmd = 'C:\Program Files\Unity\Editor\Data\Tools\UnityYAMLMerge.exe' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
