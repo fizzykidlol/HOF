@@ -12,6 +12,7 @@ public class AI : MonoBehaviour
     public ChasingTrigger trigger;
     public AudioSource macheteSound;
     private AnimatorStateInfo state;
+	public GameObject killer;
 
     public bool chaseTarget = true;
     public float stoppingDistance = 2.5f;
@@ -97,6 +98,7 @@ public class AI : MonoBehaviour
     {
         myAgent.Warp(startingPos);
         trigger.canChasing = false;
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
+		killer.SetActive (false);
     }
 }

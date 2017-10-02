@@ -9,6 +9,7 @@ public class teleportCheat : MonoBehaviour {
     public Transform location3;
     public Transform location4;
 	public Transform location5;
+	public Transform location6;
 
     // Use this for initialization
     void Start () {
@@ -39,6 +40,9 @@ public class teleportCheat : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
 			transform.position = location5.position;
+		}
+		if (Input.GetKeyDown (KeyCode.Alpha6)) {
+			transform.position = location6.position;
 		}
     }
 }

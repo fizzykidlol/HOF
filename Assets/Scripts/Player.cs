@@ -24,7 +24,6 @@ public class Player : MonoBehaviour {
     private float staminaReduceTimer;
     public AudioSource breathingSound;
 
-
     //character controller
     private RigidBodyPlayerController cc;
     private Rigidbody rb;
@@ -54,6 +53,16 @@ public class Player : MonoBehaviour {
     public float verticalSpeed = 2.0F;
     public MouseLook ml;
 
+	//Music
+	public AudioSource music;
+	public AudioSource music2;
+	public GameObject musicTrigger1;
+	public GameObject musicTrigger2;
+	public GameObject musicTrigger3;
+	private BoxCollider boxCol;
+	private BoxCollider boxCol2;
+	private BoxCollider boxCol3;
+
 
     // Use this for initialization
     void Start () {
@@ -61,6 +70,9 @@ public class Player : MonoBehaviour {
         stamina = maxStamina;
         cc = GetComponent<RigidBodyPlayerController>();
         rb = GetComponent<Rigidbody>();
+		boxCol = musicTrigger1.GetComponent<BoxCollider> ();
+		boxCol2 = musicTrigger2.GetComponent<BoxCollider> ();
+		boxCol3 = musicTrigger3.GetComponent<BoxCollider> ();
 	}
 	
 	// Update is called once per frame
@@ -305,6 +317,11 @@ public class Player : MonoBehaviour {
 
     public void gameOver()
     {
+		boxCol.enabled = true;
+		boxCol2.enabled = true;
+		boxCol3.enabled = true;
+		music.Stop ();
+		music2.Stop ();
         dead = true;
         deathScreen.SetActive(true);
     }
