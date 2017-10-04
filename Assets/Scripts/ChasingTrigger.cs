@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class ChasingTrigger : MonoBehaviour {
 	public bool canChasing = false;
-    public GameObject enemy;
-
+    public GameObject killer;
 
     void OnTriggerEnter(Collider other) {
 		if(other.transform.tag == "Player") {
-            //enemy.SetActive(true);
+            killer.SetActive(true);
             canChasing = true;
 			//transform.GetComponent<EnemyNavi> ().enabled = true;
 		}

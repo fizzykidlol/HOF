@@ -8,10 +8,12 @@ public class ladder : MonoBehaviour {
     private GameObject player;
     private bool playerLock = false;
     public bool transitionLock;
+    private animatePlayer playerModel;
 
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerModel = GameObject.FindGameObjectWithTag("Player Model").GetComponent<animatePlayer>();
 	}
 	
 	// Update is called once per frame
@@ -22,6 +24,7 @@ public class ladder : MonoBehaviour {
             player.transform.position = Vector3.MoveTowards(player.transform.position, Target.position, step);
             transitionLock = true;
             player.GetComponent<RigidBodyPlayerController>().climbing = false;
+            playerModel.Idle();
         }
 
         if (Vector3.Distance(player.transform.position, Target.position) < 0.1f)
@@ -50,6 +53,7 @@ public class ladder : MonoBehaviour {
             playerLock = false;
             player.GetComponent<RigidBodyPlayerController>().climbing = false;
             player.GetComponent<RigidBodyPlayerController>().rb.useGravity = true;
+            playerModel.Idle();
         }
     }
 }

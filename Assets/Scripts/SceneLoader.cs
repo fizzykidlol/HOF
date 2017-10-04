@@ -9,7 +9,7 @@ public class SceneLoader : MonoBehaviour {
     public GameObject loadingText;
     public GameObject continueText;
     public Slider loadingBar;
-    public string level;
+    public int level;
     AsyncOperation async;
 
     // Use this for initialization

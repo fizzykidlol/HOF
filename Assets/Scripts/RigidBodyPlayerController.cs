@@ -44,7 +44,7 @@ public class RigidBodyPlayerController : MonoBehaviour {
         {
             sprinting = false;
         }
-        if (Input.GetKey(KeyCode.LeftShift) && player.stamina > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && player.stamina > 0 && Input.GetAxis("Vertical") > 0)
         {
             sprinting = true;
             maxVelocityChange = runSpeed;
@@ -92,7 +92,15 @@ public class RigidBodyPlayerController : MonoBehaviour {
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                transform.position += -position * Time.deltaTime;
+                if (grounded)
+                {
+                    transform.position += transform.forward * -backwardsSpeedModifier;
+                }
+                else
+                {
+                    transform.position += -position * Time.deltaTime;
+                }
+                
             }
         }
 
@@ -125,6 +133,6 @@ public class RigidBodyPlayerController : MonoBehaviour {
 
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.05f);
+        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.1f);
     }
 }

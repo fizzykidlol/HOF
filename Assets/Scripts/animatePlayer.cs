@@ -6,15 +6,25 @@ using UnityEngine;
 
 public class animatePlayer : MonoBehaviour {
 
+    private Vector3 origionalPos;
     private Animator animator;
     public RigidBodyPlayerController pc;
     public Player player;
     public WallRun wr;
     public AnimatorStateInfo state;
+    public float slideMovementVertical = 0.5f;
+    public float slideMovementHorizontal = 0.2f;
+    public float climbVerticalMovement = 0.05f;
+    public float climbHorizontalMovement = 0.05f;
+    public Camera mainCamera;
+    private float origionalCloseRange;
+    public float increasedCloseRange = 0.12f;
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
+        origionalPos = transform.localPosition;
+        origionalCloseRange = mainCamera.nearClipPlane;
 	}
 	
 	// Update is called once per frame
@@ -22,7 +32,7 @@ public class animatePlayer : MonoBehaviour {
         if (!player.dead)
         {
             state = animator.GetCurrentAnimatorStateInfo(0);
-            if (!state.IsName("Slide") && !state.IsName("Jumping") && !state.IsName("Wallrun"))
+            if (!state.IsName("Slide") && !state.IsName("Jumping") && !state.IsName("Wallrun") && !pc.climbing)
             {
                 if (pc.grounded && Input.GetKey("w")
                 && !Input.GetKey("d") && !Input.GetKey("a") && !state.IsName("Slide"))
@@ -56,16 +66,21 @@ public class animatePlayer : MonoBehaviour {
                 }
             }
 
+            if (!state.IsName("Climb") && !state.IsName("Slide"))
+            {
+                transform.localPosition = origionalPos;
+                mainCamera.nearClipPlane = origionalCloseRange;
+            }
 
-            if (pc.grounded && Input.GetKey("q") && !state.IsName("Slide"))
+            if (pc.grounded && Input.GetKeyDown("q") && !state.IsName("Slide"))
             {
                 Slide();
-                transform.position += transform.up * 0.5f;
+                transform.position += transform.up * slideMovementVertical;
+                transform.position += -transform.forward * slideMovementHorizontal;
             }
             if (pc.grounded && Input.GetKeyUp("q"))
             {
                 Idle();
-                transform.position += -transform.up * 0.5f;
             }
 
 
@@ -74,14 +89,27 @@ public class animatePlayer : MonoBehaviour {
                 Jump();
             }
 
-            if (pc.climbing && Input.GetKey("w") && !state.IsName("Climb"))
+            if (pc.climbing && (Input.GetKey("w") || Input.GetKey("s")) && !state.IsName("Climb"))
             {
                 Climb();
+                transform.localPosition = origionalPos + Vector3.up * climbVerticalMovement + Vector3.forward * climbHorizontalMovement;
+                mainCamera.nearClipPlane = increasedCloseRange;
             }
 
-            if (wr.wallRun && !state.IsName("Wallrun"))
+            if (pc.climbing)
             {
-                Wallrun();
+                if (Input.GetKey("w"))
+                {
+                    animator.SetFloat("ClimbSpeed", 1f);
+                }
+                else if (Input.GetKey("s"))
+                {
+                    animator.SetFloat("ClimbSpeed", -1f);
+                }
+                else if (Input.GetKeyUp("w") || Input.GetKeyUp("s"))
+                {
+                    animator.SetFloat("ClimbSpeed", 0f);
+                }
             }
         }
     }
@@ -128,6 +156,6 @@ public class animatePlayer : MonoBehaviour {
 
     public void Climb()
     {
-        animator.Play("Climb");
+       animator.Play("Climb");
     }
 }
