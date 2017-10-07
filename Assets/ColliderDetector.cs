@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ColliderDetector : MonoBehaviour {
 
-    public bool Collision = false;
     public string targetTag;
-    private GameObject currentTarget;
-
+    public bool collision;
+    public GameObject currentTarget;
 
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.tag == targetTag)
         {
-            Collision = true;
             currentTarget = other.gameObject;
+            collision = true;
         }
     }
 
@@ -22,7 +21,7 @@ public class ColliderDetector : MonoBehaviour {
     {
         if (other.transform.tag == targetTag)
         {
-            Collision = false;
+            collision = false;
         }
     }
 

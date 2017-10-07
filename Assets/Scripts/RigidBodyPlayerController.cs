@@ -11,7 +11,6 @@ public class RigidBodyPlayerController : MonoBehaviour {
     private float speed = 5.0f;
     public float gravity = 10.0f;
     public float maxVelocityChange = 10.0f;
-    public bool canJump = true;
     public float jumpHeight = 5.0f;
     public Rigidbody rb;
     public bool sprinting;
@@ -44,7 +43,7 @@ public class RigidBodyPlayerController : MonoBehaviour {
         {
             sprinting = false;
         }
-        if (Input.GetKey(KeyCode.LeftShift) && player.stamina > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && player.stamina > 0 && Input.GetAxis("Vertical") > 0)
         {
             sprinting = true;
             maxVelocityChange = runSpeed;
@@ -92,7 +91,15 @@ public class RigidBodyPlayerController : MonoBehaviour {
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                transform.position += -position * Time.deltaTime;
+                if (grounded)
+                {
+                    transform.position += transform.forward * -backwardsSpeedModifier;
+                }
+                else
+                {
+                    transform.position += -position * Time.deltaTime;
+                }
+                
             }
         }
 

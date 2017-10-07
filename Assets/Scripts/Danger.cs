@@ -18,7 +18,7 @@ public class Danger : MonoBehaviour {
     {
         if (other.transform.tag == "Player")
         {
-            other.GetComponent<Player>().gameOver();
+            other.GetComponent<Player>().gameOver(false);
         }
     }
 }

@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 
 
 public class Player : MonoBehaviour {
+
+    //music
+    private AudioSource[] music;
 
     //health
     public float maxHealth = 3;
@@ -13,7 +17,7 @@ public class Player : MonoBehaviour {
     public bool dead = false;
     public GameObject deathScreen;
     public AudioSource lightHeartBeat;
-    public AudioSource heavyHeartbeat;   
+    public AudioSource heavyHeartbeat;
 
     //stamina
     public float maxStamina = 100;
@@ -48,24 +52,59 @@ public class Player : MonoBehaviour {
     public checkpointGeneral checkpoint;
     public int checkpointNum;
     public Transform[] SpawnPoints;
+    public Image fadeScreen;
+
 
     public Camera cam;
     public float horizontalSpeed = 2.0F;
     public float verticalSpeed = 2.0F;
     public MouseLook ml;
 
+    //torch
+    public float torchRegen;
+    public float torchReduction;
+    private float torchBattery;
+    public float torchBatteryMax;
+    public float torchMinimumBattery;
+    public bool torchOn;
+    public Light torchLight;
+    public Light torchLightOuter;
+    public Slider torchBatterySlider;
+    public Color torchMinimumColour;
+    public Color torchNormalColour;
+    public GameObject torchIconPanel;
+    public Image batteryBarFill;
+    public flickerOnKiller flicker;
+
+    //analytics
+    private float timesDied;
+    private float monsterDeaths;
+    private float environmentDeaths;
+
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
+        checkpointNum = 0;
         health = maxHealth;
         stamina = maxStamina;
         cc = GetComponent<RigidBodyPlayerController>();
         rb = GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        
+        StartCoroutine(fadeIn());
+        torchBattery = torchBatteryMax;
+        int i = 0;
+        music = new AudioSource[GameObject.FindGameObjectsWithTag("music").Length];
+        foreach(GameObject musicSource in GameObject.FindGameObjectsWithTag("music"))
+        {
+            music[i] = musicSource.GetComponent<AudioSource>();
+            i++;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
         if (!dead)
         {
             regenStamina();
@@ -73,15 +112,91 @@ public class Player : MonoBehaviour {
             walkingSounds();
             healthAndStaminaSounds();
             pause();
+            torch();
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 respawn();
+                fadeScreen.color = new Color(0, 0, 0, 1);
+                StartCoroutine(fadeIn());
             }
         }
 
+    }
+
+    IEnumerator fadeIn()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        while (fadeScreen.color.a > 0)
+        {
+            fadeScreen.color = new Color(0,0,0, fadeScreen.color.a - 0.05f);
+            yield return null;
+        }
+    }
+
+    private void torch()
+    {
+        if (Input.GetKeyDown("f"))
+        {
+            if (torchOn)
+            {
+                torchOn = false;
+            }
+            else if (torchBattery > torchMinimumBattery)
+            {
+                torchOn = true;
+            }
+        }
+
+        if (torchOn)
+        {
+            if (torchBattery > 0)
+            {
+                torchBattery -= torchReduction;
+            }
+            else
+            {
+                torchOn = false;
+            }
+        }
+        else if (torchBattery < torchBatteryMax)
+        {
+            torchBattery += torchRegen;
+        }
+        else if (torchBattery > torchBatteryMax)
+        {
+            torchBattery = torchBatteryMax;
+        }
+
+        //make the torch icon disappear when fully charged and not in use
+        if (torchBattery == torchBatteryMax && !torchOn)
+        {
+            torchIconPanel.SetActive(false);
+        }
+        else
+        {
+            torchIconPanel.SetActive(true);
+        }
+
+        if (torchBattery < torchMinimumBattery)
+        {
+            batteryBarFill.color = torchMinimumColour;
+        }
+        else
+        {
+            batteryBarFill.color = torchNormalColour;
+        }
+
+        torchLight.enabled = torchOn;
+        torchLightOuter.enabled = torchOn;
+        torchBatterySlider.value = torchBattery / torchBatteryMax;
+        if (torchOn)
+        {
+            flicker.torchFlicker();
+        }
     }
 
     //activate pause menu
@@ -93,7 +208,7 @@ public class Player : MonoBehaviour {
             {
                 unPause();
             }
-            else if (!paused) 
+            else if (!paused)
             {
                 pauseMenu.SetActive(true);
                 paused = true;
@@ -103,7 +218,7 @@ public class Player : MonoBehaviour {
             }
         }
     }
-    
+
     public void unPause()
     {
         pauseMenu.SetActive(false);
@@ -127,12 +242,12 @@ public class Player : MonoBehaviour {
         }
         //if (health == 2 && !lightHeartBeat.isPlaying)
         //{
-            //lightHeartBeat.Play();
-       // }
-       // else if (health == 1 && !heavyHeartbeat.isPlaying)
+        //lightHeartBeat.Play();
+        // }
+        // else if (health == 1 && !heavyHeartbeat.isPlaying)
         //{
-           // heavyHeartbeat.Play();
-       // }
+        // heavyHeartbeat.Play();
+        // }
     }
 
 
@@ -145,6 +260,7 @@ public class Player : MonoBehaviour {
         deathScreen.SetActive(false);
         health = maxHealth;
         checkpoint.resetObjects();
+        torchBattery = torchBatteryMax;
 
         if (checkpointNum == 0)
         {
@@ -171,7 +287,7 @@ public class Player : MonoBehaviour {
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
         }
-        
+
     }
 
     private void regenStamina()
@@ -209,10 +325,10 @@ public class Player : MonoBehaviour {
             }
         }
     }
-    
+
     private void walkingSounds()
     {
-        if (cc.grounded && Time.time > stepTimer && (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s")  || Input.GetKey("d")))
+        if (cc.grounded && Time.time > stepTimer && (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d")))
         {
             string sound = checkGroundMaterial();
             if (sound == "Stone")
@@ -260,13 +376,13 @@ public class Player : MonoBehaviour {
         return "Stone";
     }
 
-    public void takeDamage(float damage)
+    public void takeDamage(float damage, bool damageFromMonster = false)
     {
         health -= damage;
         //healthSlider.value = health / maxHealth;
         if (health <= 0)
         {
-            gameOver();
+            gameOver(damageFromMonster);
         }
     }
 
@@ -278,14 +394,45 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void gameOver()
+    public void gameOver(bool diedByMonster)
     {
+        if (diedByMonster)
+        {
+            monsterDeaths++;
+        }
+        else
+        {
+            environmentDeaths++;
+        }
+        turnOffMusic();
+        timesDied++;
         dead = true;
         deathScreen.SetActive(true);
     }
 
+    public void turnOffMusic()
+    {
+        foreach (AudioSource audio in music)
+        {
+            audio.Stop();
+        }
+    }
 
-            
+    private void OnApplicationQuit()
+    {
+        endOfGameEvent();
+    }
 
-
+    public void endOfGameEvent(bool finishedLevel = false)
+    {
+        Analytics.CustomEvent("Game ended", new Dictionary<string, object>
+        {
+            { "Number of Deaths", timesDied},
+            {"Deaths to Environment", environmentDeaths },
+            {"Deaths to Monster", monsterDeaths },
+            {"Highest Checkpoint Reached", checkpointNum},
+            {"finished game", finishedLevel},
+            {"Time Played", Time.timeSinceLevelLoad}
+        });
+    }
 }
