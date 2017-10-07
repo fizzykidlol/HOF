@@ -7,6 +7,7 @@ public class flickerOnKiller : MonoBehaviour {
     public GameObject[] monsters;
     private Camera mainCamera;
     public Light torch;
+    public Light outerTorch;
     public bool flicker = false;
     public bool enemyDetected;
     public float flickerRate = 0.1f;
@@ -16,9 +17,9 @@ public class flickerOnKiller : MonoBehaviour {
 	void Start () {
         mainCamera = GetComponent<Camera>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void torchFlicker()
+    {
         flicker = false;
         enemyDetected = false;
         foreach (GameObject monster in monsters)
@@ -47,16 +48,19 @@ public class flickerOnKiller : MonoBehaviour {
                 if (torch.enabled)
                 {
                     torch.enabled = false;
+                    outerTorch.enabled = false;
                 }
                 else
                 {
                     torch.enabled = true;
+                    outerTorch.enabled = true;
                 }
             }
         }
         else
         {
             torch.enabled = true;
+            outerTorch.enabled = true;
         }
-	}
+    }
 }
