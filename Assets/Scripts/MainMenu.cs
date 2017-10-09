@@ -51,7 +51,7 @@ public class MainMenu : MonoBehaviour {
 
     public void confirmQuitButton()
     {
-        Application.Quit();
+        SceneManager.LoadScene(4);
     }
 
     private void Update()

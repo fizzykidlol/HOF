@@ -14,15 +14,17 @@ public class animatePlayer : MonoBehaviour {
     public AnimatorStateInfo state;
     public float slideMovementVertical = 0.5f;
     public float slideMovementHorizontal = 0.2f;
-    public float climbVerticalMovement = 0.1f;
+    public float climbVerticalMovement = 0.05f;
+    public float climbHorizontalMovement = 0.05f;
     public Camera mainCamera;
     private float origionalCloseRange;
-    public float increasedCloseRange;
+    public float increasedCloseRange = 0.12f;
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
         origionalPos = transform.localPosition;
+        origionalCloseRange = mainCamera.nearClipPlane;
 	}
 	
 	// Update is called once per frame
@@ -67,6 +69,7 @@ public class animatePlayer : MonoBehaviour {
             if (!state.IsName("Climb") && !state.IsName("Slide"))
             {
                 transform.localPosition = origionalPos;
+                mainCamera.nearClipPlane = origionalCloseRange;
             }
 
             if (pc.grounded && Input.GetKeyDown("q") && !state.IsName("Slide"))
@@ -88,10 +91,26 @@ public class animatePlayer : MonoBehaviour {
 
             if (pc.climbing && (Input.GetKey("w") || Input.GetKey("s")) && !state.IsName("Climb"))
             {
-                //Climb();
-                //transform.localPosition = origionalPos + Vector3.up * climbVerticalMovement;
+                Climb();
+                transform.localPosition = origionalPos + Vector3.up * climbVerticalMovement + Vector3.forward * climbHorizontalMovement;
+                mainCamera.nearClipPlane = increasedCloseRange;
             }
 
+            if (pc.climbing)
+            {
+                if (Input.GetKey("w"))
+                {
+                    animator.SetFloat("ClimbSpeed", 1f);
+                }
+                else if (Input.GetKey("s"))
+                {
+                    animator.SetFloat("ClimbSpeed", -1f);
+                }
+                else if (Input.GetKeyUp("w") || Input.GetKeyUp("s"))
+                {
+                    animator.SetFloat("ClimbSpeed", 0f);
+                }
+            }
         }
     }
 

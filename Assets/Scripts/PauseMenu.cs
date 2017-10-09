@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
 
@@ -52,7 +53,7 @@ public class PauseMenu : MonoBehaviour {
     
     public void confirmQuitButton()
     {
-        Application.Quit();
+        SceneManager.LoadScene(4);
     }
 
     private void Update()

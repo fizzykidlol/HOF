@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class checkpointGeneral : MonoBehaviour {
-
+    public int checkpointNum;
     public GameObject checkpointIcon;
     private bool iconOn = false;
     private float iconTimer;
@@ -122,7 +122,7 @@ public class checkpointGeneral : MonoBehaviour {
     {
         if (other.transform.tag == "Player")
         {
-            other.GetComponent<Player>().checkpointNum++;
+            other.GetComponent<Player>().checkpointNum = checkpointNum;
             other.GetComponent<Player>().checkpoint = this;
             GetComponent<BoxCollider>().enabled = false;
             iconOn = true;

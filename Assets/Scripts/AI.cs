@@ -12,7 +12,6 @@ public class AI : MonoBehaviour
     public ChasingTrigger trigger;
     public AudioSource macheteSound;
     private AnimatorStateInfo state;
-	public GameObject killer;
 
     public bool chaseTarget = true;
     public float stoppingDistance = 2.5f;
@@ -25,6 +24,7 @@ public class AI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		gameObject.SetActive(false);
         target = GameObject.FindGameObjectWithTag("Player").transform;
         startingPos = transform.position;
         myAgent = GetComponent<NavMeshAgent>();
@@ -38,6 +38,7 @@ public class AI : MonoBehaviour
         state = myAnimator.GetNextAnimatorStateInfo(0);
         if (trigger.canChasing)
         {
+            gameObject.SetActive(true);
             ChaseTarget();
         }
         else if (!state.IsName("attack"))
@@ -59,6 +60,7 @@ public class AI : MonoBehaviour
         if (distanceFromTarget >= stoppingDistance)
         {
             chaseTarget = true;
+            
         }
 
         else
@@ -88,7 +90,7 @@ public class AI : MonoBehaviour
         }
     }
 
-    void damagePlayer()
+    void DamagePlayer()
     {
         target.GetComponent<Player>().takeDamage(1);
         macheteSound.Play();
@@ -99,6 +101,5 @@ public class AI : MonoBehaviour
         myAgent.Warp(startingPos);
         trigger.canChasing = false;
         gameObject.SetActive(false);
-		killer.SetActive (false);
     }
 }

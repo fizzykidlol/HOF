@@ -3,9 +3,8 @@ using System.Collections;
 
 public class MonsterScreamingTrigger : MonoBehaviour {
 
-	public AudioClip SoundToPlay;
 	public float Volume;
-	AudioSource audio;
+	public AudioSource audio;
 	public bool alreadyPlayed = false;
 	void Start()
 	{
@@ -16,7 +15,7 @@ public class MonsterScreamingTrigger : MonoBehaviour {
 	{
 		if (!alreadyPlayed)
 		{
-			audio.PlayOneShot(SoundToPlay, Volume);
+            audio.Play();
 			alreadyPlayed = true;
 		}
 	}

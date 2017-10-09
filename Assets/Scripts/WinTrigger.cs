@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class WinTrigger : MonoBehaviour {
 
+    public Player player;
+
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
@@ -19,6 +20,7 @@ public class WinTrigger : MonoBehaviour {
     {
         if (other.transform.tag == "Player")
         {
+            player.endOfGameEvent(true);
             SceneManager.LoadScene(3);
         }
     }

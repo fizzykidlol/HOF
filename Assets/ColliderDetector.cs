@@ -6,7 +6,7 @@ public class ColliderDetector : MonoBehaviour {
 
     public string targetTag;
     public bool collision;
-    private GameObject currentTarget;
+    public GameObject currentTarget;
 
     private void OnTriggerStay(Collider other)
     {

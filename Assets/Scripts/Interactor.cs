@@ -9,13 +9,15 @@ public class Interactor : MonoBehaviour {
     private bool interactableLookedAt = false;
     public ColliderDetector detector;
     public float detectionAngle = 30f;
-
+    public bool itemDetected = false;
+    private Interactable interactable;
 	
 	// Update is called once per frame
 	void Update () {
         interactableLookedAt = false;
         if (detector.collision)
         {
+            
             Vector3 targetDir = detector.returnTouchingObject().transform.position - transform.position;
             float angle = Vector3.Angle(targetDir , transform.forward);
             if (angle < detectionAngle)
@@ -26,6 +28,8 @@ public class Interactor : MonoBehaviour {
                     if (hit.transform.tag == "Interactable")
                     {
                         interactableLookedAt = true;
+                        itemDetected = true;
+                        interactable = detector.returnTouchingObject().GetComponent<Interactable>();
                     }
                 }
             }
@@ -33,18 +37,36 @@ public class Interactor : MonoBehaviour {
         }
 
 
-        if (interactableLookedAt)
+        if (itemDetected)
         {
-            IntIcon.SetActive(true);
-            if (Input.GetMouseButton(0))
+            if (interactable.target.transform.tag == "Newspaper" 
+                && interactable.activated && Input.GetMouseButtonDown(0))
             {
-                detector.returnTouchingObject().GetComponent<Interactable>().activate();
+                interactable.deactivateNewspaper();
+            }
+
+            else if (interactableLookedAt)
+            {
+                if (!interactable.activated)
+                {
+                    IntIcon.SetActive(true);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        interactable.activate();
+                    }
+                }
+                else
+                {
+                    IntIcon.SetActive(false);
+                }
+            }
+            else
+            {
+                IntIcon.SetActive(false);
             }
         }
-        else
-        {
-            IntIcon.SetActive(false);
-        }
+
+
 		
 	}
 }
