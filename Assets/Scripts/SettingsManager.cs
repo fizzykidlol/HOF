@@ -17,21 +17,23 @@ public class SettingsManager : MonoBehaviour
     public Slider sensitivitySlider;
     public Button applyButton;
 
-    public AudioSource musicSource;
-    public AudioSource[] SFXSources;
+    public GameObject[] musicSources;
+    public GameObject[] SFXSources;
 
     public Resolution[] resolutions;
     public GameSettings gameSettings;
 
     public static float sensitivity = 1;
     public static float SFXvolume = 1;
+    
 
     public PauseMenu menu;
     public MainMenu mainMenu;
     // Use this for initialization
     void OnEnable()
     {
-
+        musicSources = GameObject.FindGameObjectsWithTag("music");
+        SFXSources = GameObject.FindGameObjectsWithTag("SFX");
         gameSettings = new GameSettings();
 
         fullscreenToggle.onValueChanged.AddListener(delegate { OnFullscreenToggle(); });
@@ -95,30 +97,33 @@ public class SettingsManager : MonoBehaviour
 
     public void OnMusicVolumeChanged()
     {
+        gameSettings.musicVolume = musicVolumeSlider.value;
         try
         {
-            musicSource.volume = gameSettings.musicVolume = musicVolumeSlider.value;
+            foreach (GameObject music in musicSources)
+            {
+                music.GetComponent<AudioSource>().volume = SFXvolume;
+            }
         }
         catch
         {
-            gameSettings.musicVolume = musicVolumeSlider.value;
+
         }
     }
 
     public void OnSFXVolumeChanged()
     {
         SFXvolume = SFXVolumeSlider.value;
+        gameSettings.SFXVolume = SFXvolume;
         try
         {
-            foreach (AudioSource source in SFXSources)
+            foreach (GameObject SFX in SFXSources)
             {
-                source.volume = SFXVolumeSlider.value;
-                gameSettings.SFXVolume = SFXVolumeSlider.value;
+                SFX.GetComponent<AudioSource>().volume = SFXvolume;
             }
         }
         catch
         {
-            gameSettings.SFXVolume = SFXVolumeSlider.value;
         }
     }
 

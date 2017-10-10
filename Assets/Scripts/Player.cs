@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
+    //music
+    private AudioSource[] music;
+
     //health
     public float maxHealth = 3;
     private float health;
@@ -57,10 +60,33 @@ public class Player : MonoBehaviour {
     public float verticalSpeed = 2.0F;
     public MouseLook ml;
 
+    //torch
+    public float torchRegen;
+    public float torchReduction;
+    private float torchBattery;
+    public float torchBatteryMax;
+    public float torchMinimumBattery;
+    public bool torchOn;
+    public Light torchLight;
+    public Light torchLightOuter;
+    public Slider torchBatterySlider;
+    public Color torchMinimumColour;
+    public Color torchNormalColour;
+    public GameObject torchIconPanel;
+    public Image batteryBarFill;
+    public flickerOnKiller flicker;
+
     //analytics
     private float timesDied;
     private float monsterDeaths;
     private float environmentDeaths;
+
+	//music trigger
+	public GameObject musicTrigger1;
+	public GameObject musicTrigger2;
+	private BoxCollider boxCol;
+	private BoxCollider boxCol2;
+
 
 
     // Use this for initialization
@@ -69,9 +95,19 @@ public class Player : MonoBehaviour {
         checkpointNum = 0;
         health = maxHealth;
         stamina = maxStamina;
+		boxCol = musicTrigger1.GetComponent<BoxCollider> ();
+		boxCol2 = musicTrigger2.GetComponent<BoxCollider> ();
         cc = GetComponent<RigidBodyPlayerController>();
         rb = GetComponent<Rigidbody>();
         StartCoroutine(fadeIn());
+        torchBattery = torchBatteryMax;
+        int i = 0;
+        music = new AudioSource[GameObject.FindGameObjectsWithTag("music").Length];
+        foreach(GameObject musicSource in GameObject.FindGameObjectsWithTag("music"))
+        {
+            music[i] = musicSource.GetComponent<AudioSource>();
+            i++;
+        }
     }
 
     // Update is called once per frame
@@ -85,6 +121,7 @@ public class Player : MonoBehaviour {
             walkingSounds();
             healthAndStaminaSounds();
             pause();
+            torch();
         }
         else
         {
@@ -109,11 +146,74 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void torch()
+    {
+        if (Input.GetKeyDown("f"))
+        {
+            if (torchOn)
+            {
+                torchOn = false;
+            }
+            else if (torchBattery > torchMinimumBattery)
+            {
+                torchOn = true;
+            }
+        }
+
+        if (torchOn)
+        {
+            if (torchBattery > 0)
+            {
+                torchBattery -= torchReduction;
+            }
+            else
+            {
+                torchOn = false;
+            }
+        }
+        else if (torchBattery < torchBatteryMax)
+        {
+            torchBattery += torchRegen;
+        }
+        else if (torchBattery > torchBatteryMax)
+        {
+            torchBattery = torchBatteryMax;
+        }
+
+        //make the torch icon disappear when fully charged and not in use
+        if (torchBattery == torchBatteryMax && !torchOn)
+        {
+            torchIconPanel.SetActive(false);
+        }
+        else
+        {
+            torchIconPanel.SetActive(true);
+        }
+
+        if (torchBattery < torchMinimumBattery)
+        {
+            batteryBarFill.color = torchMinimumColour;
+        }
+        else
+        {
+            batteryBarFill.color = torchNormalColour;
+        }
+
+        torchLight.enabled = torchOn;
+        torchLightOuter.enabled = torchOn;
+        torchBatterySlider.value = torchBattery / torchBatteryMax;
+        if (torchOn)
+        {
+            flicker.torchFlicker();
+        }
+    }
+
     //activate pause menu
     private void pause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P))
         {
+            
             if (paused && onTopMenu)
             {
                 unPause();
@@ -124,7 +224,7 @@ public class Player : MonoBehaviour {
                 paused = true;
                 onTopMenu = true;
                 Time.timeScale = 0;
-                Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.None;  
             }
         }
     }
@@ -135,11 +235,10 @@ public class Player : MonoBehaviour {
         paused = false;
         onTopMenu = false;
         Time.timeScale = 1;
-
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private IEnumerator DisableCursor()
-    {
+    private IEnumerator DisableCursor() {
         yield return new WaitForEndOfFrame();
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -170,6 +269,7 @@ public class Player : MonoBehaviour {
         deathScreen.SetActive(false);
         health = maxHealth;
         checkpoint.resetObjects();
+        torchBattery = torchBatteryMax;
 
         if (checkpointNum == 0)
         {
@@ -313,9 +413,20 @@ public class Player : MonoBehaviour {
         {
             environmentDeaths++;
         }
+        turnOffMusic();
+		boxCol.enabled = true;
+		boxCol2.enabled = true;
         timesDied++;
         dead = true;
         deathScreen.SetActive(true);
+    }
+
+    public void turnOffMusic()
+    {
+        foreach (AudioSource audio in music)
+        {
+            audio.Stop();
+        }
     }
 
     private void OnApplicationQuit()

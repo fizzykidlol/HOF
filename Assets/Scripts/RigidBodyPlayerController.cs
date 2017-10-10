@@ -11,7 +11,6 @@ public class RigidBodyPlayerController : MonoBehaviour {
     private float speed = 5.0f;
     public float gravity = 10.0f;
     public float maxVelocityChange = 10.0f;
-    public bool canJump = true;
     public float jumpHeight = 5.0f;
     public Rigidbody rb;
     public bool sprinting;
@@ -133,6 +132,6 @@ public class RigidBodyPlayerController : MonoBehaviour {
 
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.1f);
+        return Physics.Raycast(transform.position, -transform.up, disToGround + 0.05f);
     }
 }
