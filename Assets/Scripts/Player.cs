@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
     public GameObject deathScreen;
     public AudioSource lightHeartBeat;
     public AudioSource heavyHeartbeat;
+    public RawImage damageScreen;
 
     //stamina
     public float maxStamina = 100;
@@ -84,8 +85,10 @@ public class Player : MonoBehaviour {
 	//music trigger
 	public GameObject musicTrigger1;
 	public GameObject musicTrigger2;
+	public GameObject musicTrigger3;
 	private BoxCollider boxCol;
 	private BoxCollider boxCol2;
+	private BoxCollider boxCol3;
 
 
 
@@ -97,6 +100,7 @@ public class Player : MonoBehaviour {
         stamina = maxStamina;
 		boxCol = musicTrigger1.GetComponent<BoxCollider> ();
 		boxCol2 = musicTrigger2.GetComponent<BoxCollider> ();
+		boxCol3 = musicTrigger3.GetComponent<BoxCollider> ();
         cc = GetComponent<RigidBodyPlayerController>();
         rb = GetComponent<Rigidbody>();
         StartCoroutine(fadeIn());
@@ -388,10 +392,28 @@ public class Player : MonoBehaviour {
     public void takeDamage(float damage, bool damageFromMonster = false)
     {
         health -= damage;
+        damageUI();
         //healthSlider.value = health / maxHealth;
         if (health <= 0)
         {
             gameOver(damageFromMonster);
+        }
+    }
+
+    public void damageUI()
+    {
+        if (health == 0 || health == 3)
+        {
+            damageScreen.color = new Color(1, 1, 1, 0);
+        }
+        if (health == 2)
+        {
+            damageScreen.color = new Color(1, 1, 1, 0.2f);
+        }
+
+        if (health == 1)
+        {
+            damageScreen.color = new Color(1, 1, 1, 0.5f);
         }
     }
 
@@ -416,6 +438,7 @@ public class Player : MonoBehaviour {
         turnOffMusic();
 		boxCol.enabled = true;
 		boxCol2.enabled = true;
+		boxCol3.enabled = true;
         timesDied++;
         dead = true;
         deathScreen.SetActive(true);
@@ -436,7 +459,9 @@ public class Player : MonoBehaviour {
 
     public void endOfGameEvent(bool finishedLevel = false)
     {
-        Analytics.CustomEvent("Game ended", new Dictionary<string, object>
+        if (Analytics.enabled)
+        {
+            Analytics.CustomEvent("Game ended", new Dictionary<string, object>
         {
             { "Number of Deaths", timesDied},
             {"Deaths to Environment", environmentDeaths },
@@ -445,5 +470,6 @@ public class Player : MonoBehaviour {
             {"finished game", finishedLevel},
             {"Time Played", Time.timeSinceLevelLoad}
         });
+        }
     }
 }

@@ -24,7 +24,6 @@ public class AI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		gameObject.SetActive(false);
         target = GameObject.FindGameObjectWithTag("Player").transform;
         startingPos = transform.position;
         myAgent = GetComponent<NavMeshAgent>();
@@ -100,6 +99,7 @@ public class AI : MonoBehaviour
     {
         myAgent.Warp(startingPos);
         trigger.canChasing = false;
+        gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 }

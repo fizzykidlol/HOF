@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 
 public class MainMenu : MonoBehaviour {
 
     public GameObject optionsPanel;
     public GameObject confirmQuitPanel;
     public GameObject pauseMenuPanel;
+    public GameObject analyticsPanel;
     private bool options;
     private bool confirmQuit;
 
@@ -17,6 +19,8 @@ public class MainMenu : MonoBehaviour {
     public Button quitButton;
     public Button quitYesButton;
     public Button quitNoButton;
+    public Button analyticsYesButton;
+    public Button analyticsNoButton;
 
     private void Start()
     {
@@ -25,11 +29,13 @@ public class MainMenu : MonoBehaviour {
         quitButton.onClick.AddListener(delegate { quitButtonPressed(); });
         quitYesButton.onClick.AddListener(delegate { confirmQuitButton(); });
         quitNoButton.onClick.AddListener(delegate { exitQuitConfirmation(); });
+        analyticsYesButton.onClick.AddListener(delegate { analyticsYes(); });
+        analyticsNoButton.onClick.AddListener(delegate { analyticsNo(); });
     }
 
     public void startButtonPressed()
     {
-        SceneManager.LoadScene("loading");
+        analyticsPanel.SetActive(true);
     }
 
 
@@ -67,6 +73,21 @@ public class MainMenu : MonoBehaviour {
                 exitQuitConfirmation();
             }
         }
+    }
+
+    public void analyticsYes()
+    {
+        analyticsManager.instance.analyticsOn = true;
+        Analytics.enabled = true;
+        Analytics.CustomEvent("Player Started Game");
+        SceneManager.LoadScene(1);
+    }
+
+    public void analyticsNo()
+    {
+        analyticsManager.instance.analyticsOn = false;
+        Analytics.enabled = false;
+        SceneManager.LoadScene(1);
     }
 
     public void exitOptions()
