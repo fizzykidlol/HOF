@@ -12,7 +12,6 @@ public class MouseLook : MonoBehaviour
     public float baseSensitivity = 5.0f;
     public float smoothing = 2.0f;
     public Player player;
-    private bool deadDelay = false;
 
     GameObject character;
 

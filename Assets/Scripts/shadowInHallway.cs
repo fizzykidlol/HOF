@@ -5,7 +5,6 @@ using UnityEngine;
 public class shadowInHallway : MonoBehaviour {
 
     public GameObject killer;
-    public Animator anim;
     public float walkSpeed = 4;
     public float timeToDestruction = 1;
     private float destructionTimer;
@@ -36,7 +35,6 @@ public class shadowInHallway : MonoBehaviour {
         {
             on = true;
             destructionTimer = Time.time + timeToDestruction;
-            anim.Play("Walk");
         }        
     }
 }

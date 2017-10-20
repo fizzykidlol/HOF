@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour {
     public AnimateButton button;
     public newspaper newspaper;
     public bool activated = false;
+    public bool playertouching;
 
 	// Use this for initialization
 	void Start () {
@@ -57,6 +58,22 @@ public class Interactable : MonoBehaviour {
         {
             newspaper.deactivate();
             activated = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            playertouching = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            playertouching = false;
         }
     }
 }

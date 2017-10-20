@@ -11,6 +11,8 @@ public class teleportCheat : MonoBehaviour {
 	public Transform location5;
     public Transform locationPersonal;
 
+    public LevelRenderer r;
+
     // Use this for initialization
     void Start () {
 		
@@ -21,29 +23,35 @@ public class teleportCheat : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             transform.position = location1.position;
+            r.activateAll();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             transform.position = location2.position;
+            r.activateAll();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             transform.position = location3.position;
+            r.activateAll();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             transform.position = location4.position;
+            r.activateAll();
         }
 		if (Input.GetKeyDown(KeyCode.Alpha5))
 		{
 			transform.position = location5.position;
-		}
+            r.activateAll();
+        }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             transform.position = locationPersonal.position;
+            r.activateAll();
         }
     }
 }

@@ -85,20 +85,19 @@ public class checkpointGeneral : MonoBehaviour {
 
     public void resetLadder2()
     {
-        ladder2.on = false;
-        lever2.ResetLever();
+        //ladder2.on = false;
+        //lever2.ResetLever();
     }
 
     public void resetShadow()
     {
         shadow.on = false;
         shadow.killer.SetActive(true);
-        shadow.anim.Play("idle");
     }
 
     public void resetDoor()
     {
-        gate.on = false;
+        gate.opening = false;
     }
 
     public void resetMachete()
@@ -128,6 +127,10 @@ public class checkpointGeneral : MonoBehaviour {
             iconOn = true;
             checkpointIcon.SetActive(true);
             iconTimer = Time.time + IconTime;
+            if (checkpointNum == 1)
+            {
+                gate.close();
+            }
         }
     }
 

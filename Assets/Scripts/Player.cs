@@ -54,6 +54,7 @@ public class Player : MonoBehaviour {
     public int checkpointNum;
     public Transform[] SpawnPoints;
     public Image fadeScreen;
+    public LevelRenderer renderManager;
 
 
     public Camera cam;
@@ -126,11 +127,13 @@ public class Player : MonoBehaviour {
             healthAndStaminaSounds();
             pause();
             torch();
+            killOutOfBounds();
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                rb.velocity = new Vector3(0, 0, 0);
                 respawn();
                 fadeScreen.color = new Color(0, 0, 0, 1);
                 StartCoroutine(fadeIn());
@@ -150,9 +153,17 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void killOutOfBounds()
+    {
+        if (transform.position.y < -20)
+        {
+            gameOver(false);
+        }
+    }
+
     private void torch()
     {
-        if (Input.GetKeyDown("f"))
+        if (Input.GetKeyDown("f") || Input.GetMouseButtonDown(1))
         {
             if (torchOn)
             {
@@ -168,7 +179,7 @@ public class Player : MonoBehaviour {
         {
             if (torchBattery > 0)
             {
-                torchBattery -= torchReduction;
+                torchBattery -= torchReduction * Time.deltaTime;
             }
             else
             {
@@ -177,7 +188,7 @@ public class Player : MonoBehaviour {
         }
         else if (torchBattery < torchBatteryMax)
         {
-            torchBattery += torchRegen;
+            torchBattery += torchRegen * Time.deltaTime;
         }
         else if (torchBattery > torchBatteryMax)
         {
@@ -238,7 +249,7 @@ public class Player : MonoBehaviour {
         paused = false;
         onTopMenu = false;
         Time.timeScale = 1;
-
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private IEnumerator DisableCursor()
@@ -299,6 +310,7 @@ public class Player : MonoBehaviour {
             checkpoint.resetEnemy2();
             checkpoint.resetLadder();
             checkpoint.resetLadder2();
+            renderManager.fourthSection();
         }
 
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ClosingDoor : MonoBehaviour {
     public GameObject closingDoor;
+    public LevelRenderer renderManager;
     public GameObject Killer;
     public AudioSource collapse;
     public bool oneShot = false;
@@ -16,6 +17,7 @@ public class ClosingDoor : MonoBehaviour {
 			closingDoor.SetActive(true);
             Killer.SetActive(false);
             oneShot = true;
+            renderManager.thirdSection();
 		}
 	}
 }

@@ -17,23 +17,14 @@ public class Interactor : MonoBehaviour {
         interactableLookedAt = false;
         if (detector.collision)
         {
-            
             Vector3 targetDir = detector.returnTouchingObject().transform.position - transform.position;
             float angle = Vector3.Angle(targetDir , transform.forward);
             if (angle < detectionAngle)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, targetDir, out hit))
-                {
-                    if (hit.transform.tag == "Interactable")
-                    {
-                        interactableLookedAt = true;
-                        itemDetected = true;
-                        interactable = detector.returnTouchingObject().GetComponent<Interactable>();
-                    }
-                }
+                  interactableLookedAt = true;
+                  itemDetected = true;
+                  interactable = detector.returnTouchingObject().GetComponent<Interactable>();
             }
-            
         }
 
 
